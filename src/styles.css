@@ -1100,13 +1100,14 @@ td small {
   border-radius: 4px;
   border: 0;
   border-top: 3px solid var(--blue);
+  text-align: center;
 }
 .auth-card > img {
-  margin-left: 0;
+  margin-inline: auto;
 }
 .auth-card > a,
 .auth-card > small {
-  text-align: left;
+  text-align: center;
 }
 .auth-card label,
 .modal label {
