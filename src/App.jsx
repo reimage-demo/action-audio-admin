@@ -1,9 +1,10 @@
 import { publicPage, logoUrl } from "./site";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { stores, services, statuses, statusLabels } from "../shared/catalog";
+import { journeyProgress, progressStages } from "../shared/progress.js";
 const storeName = (id) => stores.find((s) => s.id === id)?.name || id;
 const serviceName = (id) => services.find((s) => s.id === id)?.name || id;
 const today = () =>
@@ -25,7 +26,7 @@ const tabs = [
   ["appointments", "Appointments"],
   ["vehicles", "Vehicle status"],
   ["customers", "Customers"],
-  ["inventory", "Inventory"],
+  ["inventory", "Electronics"],
   ["calendar", "Calendar"],
 ];
 const sampleAppointments = [
@@ -144,7 +145,7 @@ function Login() {
         <Logo />
 
         <h1>Welcome back.</h1>
-        <p>Sign in to manage appointments, vehicle updates, and inventory.</p>
+        <p>Sign in to manage appointments, vehicle updates, and electronics.</p>
         <label>
           Username
           <input
@@ -249,7 +250,12 @@ export function Portal({
     [
       "Vehicles in the shop",
       scoped.filter((a) =>
-        ["checked_in", "in_progress", "waiting_parts"].includes(a.status),
+        [
+          "checked_in",
+          "in_progress",
+          "waiting_parts",
+          "quality_check",
+        ].includes(a.status),
       ).length,
       "Active service",
     ],
@@ -279,6 +285,7 @@ export function Portal({
             ? {
                 ...a,
                 status: args.status,
+                estimatedReadyDate: args.estimatedReadyDate || undefined,
                 updates: [
                   ...a.updates,
                   {
@@ -309,7 +316,7 @@ export function Portal({
     setMessage(
       demo
         ? "Preview product saved for this session."
-        : "Inventory saved. Published items are visible on the website.",
+        : "Electronics saved. Published items are visible on the website.",
     );
     setProduct(null);
   }
@@ -540,7 +547,7 @@ export function Portal({
                   </button>
                 </section>
                 <section className="panel compact">
-                  <h2>Public inventory</h2>
+                  <h2>Public electronics</h2>
                   <p>
                     {inventory.filter((p) => p.published).length} published
                     products across your stores. Add new arrivals and update
@@ -550,7 +557,7 @@ export function Portal({
                     className="text-button"
                     onClick={() => navigate("inventory")}
                   >
-                    Manage inventory
+                    Manage electronics
                   </button>
                 </section>
               </div>
@@ -605,33 +612,7 @@ export function Portal({
                         <p>
                           {a.name} · {serviceName(a.service)}
                         </p>
-                        <div className="progress-track">
-                          {[
-                            "requested",
-                            "confirmed",
-                            "checked_in",
-                            "in_progress",
-                            "ready",
-                          ].map((s, i) => (
-                            <span
-                              key={s}
-                              className={
-                                i <=
-                                (a.status === "waiting_parts"
-                                  ? 3
-                                  : [
-                                      "requested",
-                                      "confirmed",
-                                      "checked_in",
-                                      "in_progress",
-                                      "ready",
-                                    ].indexOf(a.status))
-                                  ? "done"
-                                  : ""
-                              }
-                            />
-                          ))}
-                        </div>
+                        <ServiceProgress appointment={a} compact />
                         <span className="text-button">Manage service</span>
                       </button>
                     ))}
@@ -697,7 +678,7 @@ export function Portal({
               <div className="toolbar">
                 <input
                   type="search"
-                  aria-label="Search inventory"
+                  aria-label="Search electronics"
                   placeholder="Search products, brands, or categories…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -894,6 +875,9 @@ function Modal({ title, onClose, children }) {
 function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
   const [status, setStatus] = useState(a.status),
     [message, setMessage] = useState(""),
+    [estimatedReadyDate, setEstimatedReadyDate] = useState(
+      a.estimatedReadyDate || "",
+    ),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   return (
@@ -901,6 +885,7 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
       <span className={"status status-" + a.status}>
         {statusLabels[a.status]}
       </span>
+      <ServiceProgress appointment={a} />
       <h3 className="detail-name">{a.name}</h3>
       <p>{a.vehicle}</p>
       <dl className="detail-grid">
@@ -939,7 +924,7 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
           setBusy(true);
           setError("");
           try {
-            await onSave({ id: a._id, status, message });
+            await onSave({ id: a._id, status, message, estimatedReadyDate });
             setMessage("");
           } catch (err) {
             setError(err.data || err.message);
@@ -948,6 +933,27 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
           }
         }}
       >
+        <div
+          className="milestone-actions"
+          role="group"
+          aria-label="Set service milestone"
+        >
+          {[
+            ["confirmed", "Appointment"],
+            ["in_progress", "In service"],
+            ["quality_check", "Final checks"],
+            ["ready", "Ready"],
+          ].map(([value, label]) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={status === value}
+              onClick={() => setStatus(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <label>
           Service status
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -958,6 +964,19 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
             ))}
           </select>
         </label>
+        <label>
+          Target pickup date · optional
+          <input
+            type="date"
+            value={estimatedReadyDate}
+            onChange={(e) => setEstimatedReadyDate(e.target.value)}
+          />
+        </label>
+        <p className="estimate-help">
+          A target date enables daily estimated percentages within the current
+          stage. Only staff updates advance stages; parts holds pause the
+          estimate. Clear the date to show milestone percentages only.
+        </p>
         <label>
           Customer-facing update
           <textarea
@@ -1062,6 +1081,10 @@ function ProductDialog({ product: p, onClose, onSave }) {
                 "Remote starters",
                 "Security",
                 "Accessories",
+                "Motorcycle audio",
+                "Video systems",
+                "Power liftgates",
+                "Radar detectors",
               ].map((c) => (
                 <option key={c}>{c}</option>
               ))}
@@ -1069,12 +1092,8 @@ function ProductDialog({ product: p, onClose, onSave }) {
           </label>
           <label>
             Store
-            <select name="store" defaultValue={p.store}>
-              {stores.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
+            <select name="store" defaultValue="wethersfield">
+              <option value="wethersfield">Wethersfield · Electronics</option>
             </select>
           </label>
           <label>
@@ -1123,7 +1142,9 @@ function ProductDialog({ product: p, onClose, onSave }) {
           />{" "}
           Publish on the website
         </label>
-        <small>Uncheck to hide this item from the public inventory.</small>
+        <small>
+          Uncheck to hide this item from the public electronics catalog.
+        </small>
         {error && (
           <div role="alert" className="notice">
             {error}
@@ -1132,5 +1153,61 @@ function ProductDialog({ product: p, onClose, onSave }) {
         <button disabled={busy}>{busy ? "Saving…" : "Save product"}</button>
       </form>
     </Modal>
+  );
+}
+
+function ServiceProgress({ appointment, compact = false }) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+  const progress = journeyProgress(appointment, now);
+  return (
+    <div className={"service-progress" + (compact ? " compact" : "")}>
+      <div className="progress-summary">
+        <strong>{progress.percent}%</strong>
+        <span>
+          {progress.paused
+            ? "On hold"
+            : progress.estimated
+              ? "Estimated progress"
+              : "Service milestone"}
+        </span>
+      </div>
+      <div
+        className="progress-track"
+        role="progressbar"
+        aria-label="Service progress"
+        aria-valuenow={progress.percent}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        {progressStages.map((step, i) => (
+          <span key={step.id} className={i <= progress.stage ? "done" : ""} />
+        ))}
+      </div>
+      {!compact && (
+        <>
+          <ol className="admin-stages">
+            {progressStages.map((step, i) => (
+              <li
+                key={step.id}
+                className={i === progress.stage ? "current" : ""}
+              >
+                {step.label}
+              </li>
+            ))}
+          </ol>
+          <small>
+            {progress.overdue
+              ? "Target date passed — update the pickup estimate."
+              : appointment.estimatedReadyDate
+                ? `Target pickup: ${dateLabel(appointment.estimatedReadyDate)}`
+                : "No pickup estimate set."}
+          </small>
+        </>
+      )}
+    </div>
   );
 }

@@ -7,6 +7,7 @@ export const status = v.union(
     "checked_in",
     "in_progress",
     "waiting_parts",
+    "quality_check",
     "ready",
     "completed",
     "cancelled",

@@ -1189,3 +1189,78 @@ td small {
     font-size: 14px;
   }
 }
+/* Shared four-stage service journey */
+.service-progress {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #e6e7ec;
+  border-radius: 16px;
+  background: #fafafb;
+}
+.service-progress.compact {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.progress-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.progress-summary strong {
+  font-size: 26px;
+  color: #c82a3b;
+  letter-spacing: -1px;
+}
+.progress-summary span {
+  font-size: 12px;
+  color: #687080;
+}
+.service-progress .progress-track {
+  margin: 14px 0;
+}
+.service-progress .progress-track .done {
+  background: #ce2c40;
+}
+.admin-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0;
+  list-style: none;
+  font-size: 11px;
+  color: #818695;
+  margin: 0 0 16px;
+}
+.admin-stages .current {
+  color: #b92638;
+  font-weight: 700;
+}
+.milestone-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin: 24px 0 18px;
+}
+.milestone-actions button {
+  background: #f2f3f6;
+  color: #555d6d;
+  padding: 10px 5px;
+  font-size: 12px;
+  border: 1px solid #e5e7ee;
+  border-radius: 8px;
+}
+.milestone-actions button[aria-pressed="true"] {
+  background: #fff0f2;
+  color: #b52135;
+  border-color: #e7a9b1;
+}
+.estimate-help {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #687080;
+}
+.status-quality_check {
+  background: #f0ebff;
+  color: #6b46a6;
+}

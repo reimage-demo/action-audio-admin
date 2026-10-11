@@ -6,7 +6,7 @@ export const publicList = query({
   args: {},
   handler: async (ctx) =>
     (await ctx.db.query("inventory").order("desc").collect()).filter(
-      (p) => p.published,
+      (p) => p.published && p.store === "wethersfield",
     ),
 });
 export const list = query({
@@ -20,6 +20,10 @@ export const save = mutation({
   args: { id: v.optional(v.id("inventory")), ...product },
   handler: async (ctx, { id, ...data }) => {
     await requireAdmin(ctx);
+    if (data.store !== "wethersfield")
+      throw new ConvexError(
+        "Electronics are available through Wethersfield. Hartford handles detailing.",
+      );
     if (
       !data.name.trim() ||
       data.name.length > 140 ||
@@ -34,6 +38,10 @@ export const save = mutation({
         "Remote starters",
         "Security",
         "Accessories",
+        "Motorcycle audio",
+        "Video systems",
+        "Power liftgates",
+        "Radar detectors",
       ].includes(data.category) ||
       (data.price !== undefined &&
         (!Number.isFinite(data.price) || data.price < 0)) ||

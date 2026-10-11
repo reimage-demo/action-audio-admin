@@ -1,4 +1,4 @@
-import { services } from "../shared/catalog.js";
+import { services, serviceAvailableAt } from "../shared/catalog.js";
 import { query, mutation } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { bytesToHex } from "@noble/hashes/utils";
@@ -55,6 +55,7 @@ type Booking = {
   requestKey: string;
   createdAt: number;
   updates: { status: string; message: string; at: number }[];
+  estimatedReadyDate?: string;
 };
 const slotIndex = (s: string, d: string, t: string) =>
   blindIndex("slot", JSON.stringify([s, d, t]));
@@ -142,6 +143,10 @@ export const create = mutation({
     validDate(args.date);
     if (!times.includes(args.time) || !serviceIds.includes(args.service))
       throw new ConvexError("Choose a valid service and time.");
+    if (!serviceAvailableAt(args.store, args.service))
+      throw new ConvexError(
+        "Electronics and remote starters are at Wethersfield. Auto detailing is at Hartford. Please choose the matching location.",
+      );
     const recent = await ctx.db
       .query("appointments")
       .withIndex("by_email", (q) => q.eq("emailHash", emailHash))
@@ -210,6 +215,8 @@ export const track = query({
       service: a.service,
       status: a.status,
       updates: a.updates,
+      createdAt: a.createdAt,
+      estimatedReadyDate: a.estimatedReadyDate,
     };
   },
 });
@@ -228,7 +235,12 @@ export const list = query({
   },
 });
 export const updateStatus = mutation({
-  args: { id: v.id("appointments"), status, message: v.string() },
+  args: {
+    id: v.id("appointments"),
+    status,
+    message: v.string(),
+    estimatedReadyDate: v.optional(v.string()),
+  },
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
     const row = await ctx.db.get(args.id);
@@ -236,6 +248,26 @@ export const updateStatus = mutation({
     if (args.message.length > 1000)
       throw new ConvexError("Keep customer updates under 1,000 characters.");
     const a = await read(row);
+    const targetDate = args.estimatedReadyDate;
+    if (targetDate && targetDate !== a.estimatedReadyDate) {
+      const date = new Date(targetDate + "T12:00:00Z");
+      const today = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date());
+      if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(targetDate) ||
+        Number.isNaN(+date) ||
+        date.toISOString().slice(0, 10) !== targetDate ||
+        targetDate < today ||
+        +date > Date.now() + 180 * 86400000
+      )
+        throw new ConvexError(
+          "Choose a target pickup date from today through the next six months.",
+        );
+    }
     if (!active(a) && active({ status: args.status })) {
       const conflicts = await ctx.db
         .query("appointments")
@@ -252,6 +284,10 @@ export const updateStatus = mutation({
         {
           ...a,
           status: args.status,
+          estimatedReadyDate:
+            targetDate === undefined
+              ? a.estimatedReadyDate
+              : targetDate || undefined,
           updates: [
             ...a.updates,
             {

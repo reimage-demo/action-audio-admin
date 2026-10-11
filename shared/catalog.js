@@ -6,7 +6,9 @@ export const stores = [
     city: "Wethersfield, CT 06109",
     phone: "(860) 667-6330",
     tel: "8606676330",
-    detail: "In the Motts Shopping Center",
+    detail: "Remote starters, car audio & electronics",
+    specialty: "Electronics & remote starters",
+    serviceIds: ["electronics-repair", "electrical-installation"],
   },
   {
     id: "hartford",
@@ -15,7 +17,9 @@ export const stores = [
     city: "Hartford, CT 06120",
     phone: null,
     tel: null,
-    detail: "Your neighborhood mobile electronics specialists",
+    detail: "Vehicle detailing, inside and out",
+    specialty: "Auto detailing",
+    serviceIds: ["auto-detailing"],
   },
 ];
 export const services = [
@@ -65,6 +69,7 @@ export const statuses = [
   "checked_in",
   "in_progress",
   "waiting_parts",
+  "quality_check",
   "ready",
   "completed",
   "cancelled",
@@ -74,8 +79,18 @@ export const statusLabels = {
   confirmed: "Appointment confirmed",
   checked_in: "Vehicle checked in",
   in_progress: "Work in progress",
-  waiting_parts: "Waiting for parts",
+  waiting_parts: "On hold · waiting for parts",
+  quality_check: "Final checks",
   ready: "Ready for pickup",
   completed: "Completed",
   cancelled: "Cancelled",
 };
+
+export const serviceStore = (serviceId) =>
+  stores.find((store) => store.serviceIds.includes(serviceId));
+export const serviceAvailableAt = (storeId, serviceId) =>
+  Boolean(
+    stores
+      .find((store) => store.id === storeId)
+      ?.serviceIds.includes(serviceId),
+  );

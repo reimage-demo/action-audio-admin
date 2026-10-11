@@ -37,7 +37,7 @@ function Setup() {
         <h1>Staff workspace</h1>
         <p>
           Connect this portal to Action Audio’s Convex deployment to manage
-          appointments, vehicle updates, and inventory.
+          appointments, vehicle updates, and electronics.
         </p>
         <div className="setup-note">
           Set <code>VITE_CONVEX_URL</code> in <code>admin/.env.local</code>.

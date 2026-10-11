@@ -22,7 +22,7 @@ function booking() {
     phone: "8605557890",
     vehicle: "2024 Private Vehicle",
     service: "electronics-repair",
-    store: "hartford" as const,
+    store: "wethersfield" as const,
     date: d.toISOString().slice(0, 10),
     time: "11:00",
     notes: "Confidential customer notes",

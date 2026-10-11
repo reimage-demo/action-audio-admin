@@ -71,7 +71,10 @@ describe("booking and vehicle service workflow", () => {
         request({ email: "other@example.com" }),
       ),
     ).rejects.toThrow("just requested");
-    await t.mutation(api.appointments.create, request({ store: "hartford" }));
+    await t.mutation(
+      api.appointments.create,
+      request({ store: "hartford", service: "auto-detailing" }),
+    );
     expect(
       await t.query(api.appointments.availability, {
         store: "wethersfield",
@@ -155,6 +158,64 @@ describe("booking and vehicle service workflow", () => {
       }),
     ).toContain("10:00");
   });
+  it("enforces store specialties and assigns independent random codes", async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.appointments.create, request({ store: "hartford" })),
+    ).rejects.toThrow("matching location");
+    await expect(
+      t.mutation(
+        api.appointments.create,
+        request({ service: "auto-detailing" }),
+      ),
+    ).rejects.toThrow("matching location");
+    const a = await t.mutation(api.appointments.create, request());
+    const b = await t.mutation(
+      api.appointments.create,
+      request({ store: "hartford", service: "auto-detailing" }),
+    );
+    expect(a.trackingCode).not.toBe(b.trackingCode);
+  });
+  it("publishes final checks and target dates, validates estimates, and can clear them", async () => {
+    const t = convexTest(schema, modules),
+      admin = await staff(t);
+    const saved = await t.mutation(api.appointments.create, request());
+    const a = (await admin.query(api.appointments.list, {}))[0];
+    const update = {
+      id: a._id,
+      status: "quality_check" as const,
+      message: "Checking the installation.",
+    };
+    for (const estimatedReadyDate of [
+      "2020-01-01",
+      "2026-02-30",
+      "not-a-date",
+    ]) {
+      await expect(
+        admin.mutation(api.appointments.updateStatus, {
+          ...update,
+          estimatedReadyDate,
+        }),
+      ).rejects.toThrow("target pickup");
+    }
+    await admin.mutation(api.appointments.updateStatus, {
+      ...update,
+      estimatedReadyDate: futureDate(),
+    });
+    let tracked = await t.query(api.appointments.track, {
+      code: saved.trackingCode,
+    });
+    expect(tracked?.status).toBe("quality_check");
+    expect(tracked?.estimatedReadyDate).toBe(futureDate());
+    await admin.mutation(api.appointments.updateStatus, {
+      ...update,
+      estimatedReadyDate: "",
+    });
+    tracked = await t.query(api.appointments.track, {
+      code: saved.trackingCode,
+    });
+    expect(tracked?.estimatedReadyDate).toBeUndefined();
+  });
   it("does not let a reopened appointment take an occupied slot", async () => {
     const t = convexTest(schema, modules);
     const admin = await staff(t);
@@ -185,7 +246,7 @@ describe("inventory publishing", () => {
       name: "Test speaker",
       brand: "Test",
       category: "Speakers",
-      store: "hartford" as const,
+      store: "wethersfield" as const,
       description: "Test product",
       availability: "in_stock" as const,
       published: false,
