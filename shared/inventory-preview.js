@@ -1,5 +1,6 @@
 // Manufacturer examples for the client preview, never live store inventory.
-// Image provenance is recorded in assets/products/sources.json.
+// Original category illustrations are not exact model photographs.
+// Prompts are recorded in assets/original-image-prompts.json.
 export const previewProducts = [
   {
     name: "S2-S65 6.5-inch speakers",
@@ -7,7 +8,7 @@ export const previewProducts = [
     category: "Speakers",
     description:
       "Two-way coaxial speakers with integrated tweeters. Rated for 80 watts RMS.",
-    imageUrl: "/assets/products/alpine-s2-s65.webp",
+    imageUrl: "/assets/gear-speakers.webp",
     sourceUrl: "https://www.alpine-usa.com/product/s-series-speakers-s2s65",
   },
   {
@@ -16,7 +17,7 @@ export const previewProducts = [
     category: "Subwoofers",
     description:
       "A 12-inch Punch P3 subwoofer with dual 4-ohm voice coils for a custom bass system.",
-    imageUrl: "/assets/products/rockford-p3d4-12.webp",
+    imageUrl: "/assets/gear-subwoofer.webp",
     sourceUrl: "https://rockfordfosgate.com/products/details/p3d4-12/",
   },
   {
@@ -25,7 +26,7 @@ export const previewProducts = [
     category: "Amplifiers",
     description:
       "A 500-watt Class-D mono amplifier designed to power a dedicated subwoofer system.",
-    imageUrl: "/assets/products/rockford-r2-500x1.webp",
+    imageUrl: "/assets/gear-amplifier.webp",
     sourceUrl: "https://rockfordfosgate.com/products/details/r2-500x1/",
   },
   {
@@ -34,7 +35,7 @@ export const previewProducts = [
     category: "Receivers",
     description:
       "A 6.8-inch touchscreen receiver with wired Apple CarPlay, Android Auto, and Bluetooth.",
-    imageUrl: "/assets/products/kenwood-dmx4707s.webp",
+    imageUrl: "/assets/gear-receiver.webp",
     sourceUrl:
       "https://www.kenwood.com/usa/car/caraudio/navigation_multimedia/dmx4707s/",
   },
@@ -44,7 +45,7 @@ export const previewProducts = [
     category: "Speakers",
     description:
       "A-Series MAX two-way coaxial speakers for an aftermarket vehicle audio system.",
-    imageUrl: "/assets/products/pioneer-ts-a653fh.webp",
+    imageUrl: "/assets/gear-speakers-pair.webp",
     sourceUrl: "https://usa.pioneer/products/ts-a653fh",
   },
   {
@@ -53,7 +54,7 @@ export const previewProducts = [
     category: "Subwoofers",
     description:
       "An S-Series subwoofer with dual 4-ohm voice coils and 600-watt RMS power handling.",
-    imageUrl: "/assets/products/alpine-s2-w12d4.webp",
+    imageUrl: "/assets/gear-subwoofer-cone.webp",
     sourceUrl: "https://www.alpine-usa.com/product/s-series-subwoofer-s2w12d4",
   },
 ];

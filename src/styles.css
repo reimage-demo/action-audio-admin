@@ -1,6 +1,41 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@500;600;650;700;750;800&display=swap");
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/assets/fonts/ibm-plex-sans-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/assets/fonts/ibm-plex-sans-500.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/assets/fonts/ibm-plex-sans-600.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/assets/fonts/ibm-plex-sans-700.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 :root {
-  font-family: "DM Sans", Arial, sans-serif;
+  font-family: "IBM Plex Sans", Arial, sans-serif;
   color: #17263d;
   background: #f6f8fc;
   font-size: 14px;
@@ -24,7 +59,7 @@ textarea {
 button {
   cursor: pointer;
   border: 1px solid var(--blue);
-  border-radius: 3px;
+  border-radius: 4px;
   background: var(--blue);
   color: white;
   padding: 11px 18px;
@@ -44,7 +79,7 @@ select,
 textarea {
   width: 100%;
   border: 1px solid #dae2ee;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #fff;
   color: #263650;
   padding: 11px 13px;
@@ -66,16 +101,16 @@ p {
 h1,
 h2,
 h3 {
-  font-family: Manrope, sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
 }
 h1 {
   font-size: 32px;
-  letter-spacing: -1.3px;
+  letter-spacing: 0;
   line-height: 1.25;
 }
 h2 {
   font-size: 18px;
-  letter-spacing: -0.4px;
+  letter-spacing: 0;
 }
 h3 {
   font-size: 16px;
@@ -127,7 +162,7 @@ a:hover {
   padding: 40px;
   background: white;
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .auth-card > img {
   width: 190px;
@@ -157,7 +192,7 @@ a:hover {
   background: #f3f6fb;
   border: 1px solid var(--line);
   padding: 17px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 12px;
 }
 .app-shell {
@@ -224,7 +259,7 @@ a:hover {
   color: white;
   background: var(--blue);
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .sidebar-bottom {
   margin-top: auto;
@@ -250,7 +285,7 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 650;
 }
@@ -304,7 +339,7 @@ a:hover {
   width: 5px;
   height: 5px;
   background: var(--blue);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .preview-banner {
   background: #eaf1ff;
@@ -349,7 +384,7 @@ a:hover {
 .stat-card {
   background: white;
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 21px;
   text-align: left;
   color: inherit;
@@ -367,8 +402,8 @@ a:hover {
 .stat-card > strong {
   display: block;
   font-size: 37px;
-  font-family: Manrope, sans-serif;
-  letter-spacing: -1px;
+  font-family: "IBM Plex Sans", sans-serif;
+  letter-spacing: 0;
   margin: 9px 0 4px;
   line-height: 1.5;
 }
@@ -379,7 +414,7 @@ a:hover {
 .panel {
   background: white;
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .panel-header {
@@ -451,7 +486,7 @@ td small {
   font-size: 12px;
   font-weight: 550;
   padding: 5px 9px;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #f0f3f8;
   color: #64738c;
   white-space: nowrap;
@@ -532,7 +567,7 @@ td small {
   padding: 26px;
   color: inherit;
   text-align: left;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .vehicle-card:hover {
   background: #fbfcff;
@@ -564,7 +599,7 @@ td small {
 .progress-track > span {
   height: 4px;
   flex: 1;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #eaf0fa;
 }
 .progress-track .done {
@@ -576,7 +611,7 @@ td small {
   color: #355586;
   padding: 16px 40px 16px 18px;
   border: 1px solid #d5e1f8;
-  border-radius: 3px;
+  border-radius: 4px;
   margin: 0 0 20px;
   font-size: 12px;
 }
@@ -607,7 +642,7 @@ td small {
   max-height: 90dvh;
   overflow: auto;
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 30px;
   color: #17263d;
 }
@@ -652,7 +687,7 @@ td small {
 .customer-note {
   background: #f5f7fc;
   padding: 17px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 12px;
   margin-bottom: 25px;
 }
@@ -940,7 +975,7 @@ td small {
 
 /* A working ledger: quiet navigation, readable tables, and flat status labels. */
 h1 {
-  letter-spacing: -1px;
+  letter-spacing: 0;
 }
 .workspace-header {
   border-bottom-color: #cdd5df;
@@ -954,7 +989,7 @@ h1 {
   font-size: 11px;
 }
 .sidebar nav button {
-  border-radius: 0;
+  border-radius: 4px;
   font-size: 14px;
   min-height: 48px;
 }
@@ -990,7 +1025,7 @@ h1 {
 .stat-card {
   border: 0;
   border-right: 1px solid #cdd5df;
-  border-radius: 0;
+  border-radius: 4px;
   padding: 22px;
 }
 .stat-card:last-child {
@@ -1009,7 +1044,7 @@ h1 {
   font-weight: 600;
 }
 .panel {
-  border-radius: 0;
+  border-radius: 4px;
   border-color: #cdd5df;
 }
 .panel-header {
@@ -1038,7 +1073,7 @@ td small {
   font-size: 12px;
 }
 .status {
-  border-radius: 0;
+  border-radius: 4px;
   background: #f0f3f8;
   font-size: 12px;
 }
@@ -1055,14 +1090,14 @@ td small {
   font-size: 14px;
 }
 .vehicle-card {
-  border-radius: 0;
+  border-radius: 4px;
   box-shadow: none;
 }
 .vehicle-card p {
   font-size: 14px;
 }
 .auth-card {
-  border-radius: 0;
+  border-radius: 4px;
   border: 0;
   border-top: 3px solid var(--blue);
 }
@@ -1103,7 +1138,7 @@ td small {
   font-size: 12px;
 }
 .notice {
-  border-radius: 0;
+  border-radius: 4px;
   border: 0;
   border-left: 3px solid var(--blue);
   font-size: 14px;
@@ -1183,7 +1218,7 @@ td small {
     margin: -12px 10px 10px;
     border: 0;
     border-bottom: 1px solid #536174;
-    border-radius: 0;
+    border-radius: 4px;
     background: transparent;
     color: #263650;
     font-size: 14px;
@@ -1194,7 +1229,7 @@ td small {
   margin: 20px 0;
   padding: 20px;
   border: 1px solid #e6e7ec;
-  border-radius: 16px;
+  border-radius: 4px;
   background: #fafafb;
 }
 .service-progress.compact {
@@ -1211,7 +1246,7 @@ td small {
 .progress-summary strong {
   font-size: 26px;
   color: #c82a3b;
-  letter-spacing: -1px;
+  letter-spacing: 0;
 }
 .progress-summary span {
   font-size: 12px;
@@ -1248,7 +1283,7 @@ td small {
   padding: 10px 5px;
   font-size: 12px;
   border: 1px solid #e5e7ee;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 .milestone-actions button[aria-pressed="true"] {
   background: #fff0f2;
@@ -1264,3 +1299,6 @@ td small {
   background: #f0ebff;
   color: #6b46a6;
 }
+
+body,button,input,select,textarea{font-family:"IBM Plex Sans",Arial,sans-serif;letter-spacing:0}h1,h2,h3{letter-spacing:0;line-height:1.2}button{border-radius:3px}
+.estimate-new{background:#fff0f1;color:#b51d32}.estimate-quoted{background:#edf4ff;color:#1257a8}.call-customer{display:inline-block;background:#1257a8;color:#fff;padding:10px 18px;margin:0 0 22px;border-radius:3px;font-weight:500}.table-scroll td>a{display:block;margin-top:5px;color:#1257a8}.detail-grid dd{overflow-wrap:anywhere}

@@ -10,6 +10,7 @@
 
 import type * as appointments from "../appointments.js";
 import type * as auth from "../auth.js";
+import type * as estimates from "../estimates.js";
 import type * as http from "../http.js";
 import type * as inventory from "../inventory.js";
 import type * as lib_encryption from "../lib/encryption.js";
@@ -27,6 +28,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   appointments: typeof appointments;
   auth: typeof auth;
+  estimates: typeof estimates;
   http: typeof http;
   inventory: typeof inventory;
   "lib/encryption": typeof lib_encryption;

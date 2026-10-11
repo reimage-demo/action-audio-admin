@@ -69,8 +69,8 @@ export const serviceContent = [
     headline: "More confidence.\nWherever you park.",
     description:
       "Explore vehicle security options, from alarm systems to convenient keyless entry. Start with a conversation about your vehicle and what you want to protect.",
-    image: "hero-remote-start.webp",
-    alt: "Remote key fob beside a parked vehicle",
+    image: "service-security.webp",
+    alt: "Original illustration of car alarm equipment and security installation",
     booking: "electrical-installation",
     category: "Security",
     items: [
@@ -96,9 +96,8 @@ export const serviceContent = [
     headline: "Take your soundtrack.\nBeyond the daily drive.",
     description:
       "Explore audio options for your motorcycle. Talk with our team about a setup suited to your bike, available space, and listening preferences.",
-    image: "products/alpine-s2-s65.webp",
-    product: true,
-    alt: "Speaker example; motorcycle compatibility must be confirmed",
+    image: "service-motorcycle.webp",
+    alt: "Original illustration of speakers integrated into a touring motorcycle fairing",
     booking: "electrical-installation",
     category: "Motorcycle audio",
     items: [
@@ -124,9 +123,8 @@ export const serviceContent = [
     headline: "Make the back seat.\nThe best seat.",
     description:
       "Explore seatback and overhead video options for passengers, along with receivers that bring modern connectivity to the dashboard.",
-    image: "products/kenwood-dmx4707s.webp",
-    product: true,
-    alt: "Kenwood touchscreen receiver example",
+    image: "service-video.webp",
+    alt: "Original illustration of rear-seat entertainment screens in a vehicle",
     booking: "electrical-installation",
     category: "Video systems",
     items: [
@@ -152,8 +150,8 @@ export const serviceContent = [
     headline: "A little lift.\nA lot of convenience.",
     description:
       "Interested in adding powered access to your cargo area? Ask our team about vehicle-specific liftgate options and installation availability.",
-    image: "hero-remote-start.webp",
-    alt: "Silver SUV with remote key fob",
+    image: "service-liftgate.webp",
+    alt: "Original illustration of a powered SUV liftgate",
     booking: "electrical-installation",
     category: "Power liftgates",
     items: [
@@ -179,8 +177,8 @@ export const serviceContent = [
     headline: "Less clutter.\nA cleaner setup.",
     description:
       "Explore detector mounting and power options for a tidy interior. Ask about equipment compatibility and installation availability for your vehicle.",
-    image: "hero-interior.webp",
-    alt: "Clean vehicle interior with integrated electronics",
+    image: "service-radar.webp",
+    alt: "Original illustration of a neatly mounted radar detector",
     booking: "electrical-installation",
     category: "Radar detectors",
     items: [
@@ -206,8 +204,8 @@ export const serviceContent = [
     headline: "Your car.\nMore connected.",
     description:
       "Explore convenient additions such as smartphone integration, satellite radio, and garage-door controls. Find out what works with your existing electronics.",
-    image: "hero-interior.webp",
-    alt: "Vehicle dashboard and door speaker",
+    image: "service-accessories.webp",
+    alt: "Original illustration of vehicle charging and connectivity accessories",
     booking: "electrical-installation",
     category: "Accessories",
     items: [
@@ -233,8 +231,8 @@ export const serviceContent = [
     headline: "Less troubleshooting.\nMore enjoying the drive.",
     description:
       "Audio cutting out? A receiver that won’t respond? Tell us what’s happening so we can assess the issue and discuss the next step.",
-    image: "hero-installation.webp",
-    alt: "Illustrative technician working on vehicle audio equipment",
+    image: "service-repair.webp",
+    alt: "Original illustration of bench diagnostics on a car stereo",
     booking: "electronics-repair",
     items: [
       "Vehicle electronics assessment",
@@ -259,8 +257,8 @@ export const serviceContent = [
     headline: "Fall in love.\nWith your ride again.",
     description:
       "Give your vehicle some extra care. Talk with us about its current condition and the interior or exterior finish you have in mind.",
-    image: "hero-interior.webp",
-    alt: "Clean leather vehicle interior",
+    image: "service-detailing.webp",
+    alt: "Original illustration of a detailer polishing a vehicle hood",
     booking: "auto-detailing",
     items: [
       "A conversation about your vehicle’s condition",
@@ -285,8 +283,8 @@ export const serviceContent = [
     headline: "The right equipment.\nThoughtfully installed.",
     description:
       "Plan your next vehicle electronics project with Action Audio. We’ll discuss your equipment, check compatibility, and help you understand the installation.",
-    image: "hero-installation.webp",
-    alt: "Illustrative car audio installation",
+    image: "service-installation.webp",
+    alt: "Original illustration of dashboard electronics and wiring installation",
     booking: "electrical-installation",
     items: [
       "Equipment and vehicle compatibility",

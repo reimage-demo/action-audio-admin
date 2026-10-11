@@ -16,5 +16,6 @@ export default defineSchema({
     .index("by_request", ["requestHash"])
     .index("by_slot", ["slotHash"])
     .index("by_email", ["emailHash"]),
+  estimates: defineTable({encrypted:encryptedValue,requestHash:v.string(),phoneHash:v.string()}).index("by_request",["requestHash"]).index("by_phone",["phoneHash"]),
   inventory: defineTable({ ...product, updatedAt: v.number() }),
 });

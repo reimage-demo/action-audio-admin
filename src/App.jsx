@@ -5,6 +5,7 @@ import { useConvexAuth, useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { stores, services, statuses, statusLabels } from "../shared/catalog";
 import { journeyProgress, progressStages } from "../shared/progress.js";
+import Estimates from "./Estimates";
 const storeName = (id) => stores.find((s) => s.id === id)?.name || id;
 const serviceName = (id) => services.find((s) => s.id === id)?.name || id;
 const today = () =>
@@ -24,6 +25,7 @@ const dateLabel = (d) =>
 const tabs = [
   ["dashboard", "Overview"],
   ["appointments", "Appointments"],
+  ["estimates", "Estimates"],
   ["vehicles", "Vehicle status"],
   ["customers", "Customers"],
   ["inventory", "Electronics"],
@@ -185,16 +187,20 @@ export default function App() {
 }
 function Connected() {
   const appointments = useQuery(api.appointments.list),
-    inventory = useQuery(api.inventory.list);
+    inventory = useQuery(api.inventory.list),
+    estimates = useQuery(api.estimates.list);
   const updateStatus = useMutation(api.appointments.updateStatus),
-    saveProduct = useMutation(api.inventory.save);
+    saveProduct = useMutation(api.inventory.save),
+    updateEstimate = useMutation(api.estimates.update);
   const { signOut } = useAuthActions();
-  if (!appointments || !inventory)
+  if (!appointments || !inventory || !estimates)
     return <div className="auth-shell">Loading your workspace…</div>;
   return (
     <Portal
       liveAppointments={appointments}
       liveInventory={inventory}
+      liveEstimates={estimates}
+      updateEstimate={updateEstimate}
       updateStatus={updateStatus}
       saveProduct={saveProduct}
       signOut={signOut}
@@ -205,6 +211,8 @@ export function Portal({
   demo = false,
   liveAppointments,
   liveInventory,
+  liveEstimates = [],
+  updateEstimate,
   updateStatus,
   saveProduct,
   signOut,
@@ -220,9 +228,25 @@ export function Portal({
     [previewAppointments, setPreviewAppointments] =
       useState(sampleAppointments),
     [previewInventory, setPreviewInventory] = useState(sampleInventory),
+    [previewEstimates, setPreviewEstimates] = useState([
+      {
+        _id: "demo-estimate",
+        name: "Casey Parker",
+        phone: "8605550102",
+        vehicleMake: "Toyota",
+        vehicleModel: "2022 RAV4",
+        service: "remote-starters",
+        store: "wethersfield",
+        status: "new",
+        staffNotes: "",
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      },
+    ]),
     [calendarDate, setCalendarDate] = useState(today());
   const appointments = demo ? previewAppointments : liveAppointments,
-    inventory = demo ? previewInventory : liveInventory;
+    inventory = demo ? previewInventory : liveInventory,
+    estimates = demo ? previewEstimates : liveEstimates;
   const scoped = appointments.filter((a) => !store || a.store === store);
   const filtered = scoped.filter(
     (a) =>
@@ -276,6 +300,27 @@ export function Portal({
     setSearch("");
     setStatus("");
     setMenu(false);
+  }
+  async function onEstimate(args) {
+    if (demo)
+      setPreviewEstimates((prev) =>
+        prev.map((a) =>
+          a._id === args.id
+            ? {
+                ...a,
+                status: args.status,
+                staffNotes: args.staffNotes,
+                updatedAt: Date.now(),
+              }
+            : a,
+        ),
+      );
+    else await updateEstimate(args);
+    setMessage(
+      demo
+        ? "Preview estimate updated. No customer was contacted."
+        : "Estimate request updated.",
+    );
   }
   async function onStatus(args) {
     if (demo)
@@ -397,6 +442,19 @@ export function Portal({
               onClick={() => navigate(id)}
             >
               {label}
+              {id === "estimates" &&
+                estimates.some(
+                  (a) => a.status === "new" && (!store || a.store === store),
+                ) && (
+                  <b>
+                    {
+                      estimates.filter(
+                        (a) =>
+                          a.status === "new" && (!store || a.store === store),
+                      ).length
+                    }
+                  </b>
+                )}
               {id === "appointments" &&
                 scoped.some((a) => a.status === "requested") && (
                   <b>{scoped.filter((a) => a.status === "requested").length}</b>
@@ -460,6 +518,8 @@ export function Portal({
                   {
                     dashboard:
                       "Appointments and service activity across both stores.",
+                    estimates:
+                      "Review vehicle details, call the customer, and record an approximate quote.",
                     appointments:
                       "Review appointment requests and confirm customer visits.",
                     vehicles:
@@ -673,6 +733,14 @@ export function Portal({
               )}
             </>
           )}
+          {tab === "estimates" && (
+            <Estimates
+              items={estimates}
+              onSave={onEstimate}
+              store={store}
+              Modal={Modal}
+            />
+          )}
           {tab === "inventory" && (
             <>
               <div className="toolbar">
@@ -690,7 +758,7 @@ export function Portal({
                       brand: "",
                       category: "Speakers",
                       description: "",
-                      store: store || "wethersfield",
+                      store: "wethersfield",
                       availability: "in_stock",
                       published: false,
                       imageUrl: "",
@@ -875,9 +943,6 @@ function Modal({ title, onClose, children }) {
 function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
   const [status, setStatus] = useState(a.status),
     [message, setMessage] = useState(""),
-    [estimatedReadyDate, setEstimatedReadyDate] = useState(
-      a.estimatedReadyDate || "",
-    ),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   return (
@@ -924,7 +989,14 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
           setBusy(true);
           setError("");
           try {
-            await onSave({ id: a._id, status, message, estimatedReadyDate });
+            await onSave({
+              id: a._id,
+              status,
+              message,
+              estimatedReadyDate: String(
+                new FormData(e.currentTarget).get("estimatedReadyDate") || "",
+              ),
+            });
             setMessage("");
           } catch (err) {
             setError(err.data || err.message);
@@ -968,8 +1040,8 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
           Target pickup date · optional
           <input
             type="date"
-            value={estimatedReadyDate}
-            onChange={(e) => setEstimatedReadyDate(e.target.value)}
+            name="estimatedReadyDate"
+            defaultValue={a.estimatedReadyDate || ""}
           />
         </label>
         <p className="estimate-help">
