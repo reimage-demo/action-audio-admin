@@ -13,7 +13,7 @@ const request = (extra = {}) => ({
   email: "customer@example.com",
   phone: "8605550123",
   vehicle: "2022 Toyota Camry",
-  service: "electronics-repair",
+  service: "electronics-replacement",
   store: "wethersfield" as const,
   date: futureDate(),
   time: "10:00",
@@ -288,5 +288,34 @@ describe("inventory publishing", () => {
         imageUrl: "javascript:alert(1)",
       }),
     ).rejects.toThrow("details");
+  });
+});
+
+describe("current service location restrictions", () => {
+  it.each([
+    ["auto-detailing", "hartford"],
+    ["window-tinting", "hartford"],
+    ["remote-starters", "wethersfield"],
+    ["car-audio", "wethersfield"],
+    ["dash-cams", "wethersfield"],
+    ["gps-trackers", "wethersfield"],
+  ])("books %s only at %s", async (service, store) => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(
+        api.appointments.create,
+        request({
+          service,
+          store: store === "hartford" ? "wethersfield" : "hartford",
+        }),
+      ),
+    ).rejects.toThrow();
+    const result = await t.mutation(
+      api.appointments.create,
+      request({ service, store }),
+    );
+    expect(
+      await t.query(api.appointments.track, { code: result.trackingCode }),
+    ).toMatchObject({ service, store });
   });
 });

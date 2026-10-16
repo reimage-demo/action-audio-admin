@@ -6,9 +6,16 @@ export const stores = [
     city: "Wethersfield, CT 06109",
     phone: "(860) 667-6330",
     tel: "8606676330",
-    detail: "Remote starters, car audio & electronics",
-    specialty: "Electronics & remote starters",
-    serviceIds: ["electronics-repair", "electrical-installation"],
+    detail: "Remote starters, stereo replacement & installation",
+    specialty: "Car audio & remote starters",
+    serviceIds: [
+      "electronics-replacement",
+      "electrical-installation",
+      "car-audio",
+      "remote-starters",
+      "dash-cams",
+      "gps-trackers",
+    ],
   },
   {
     id: "hartford",
@@ -17,49 +24,114 @@ export const stores = [
     city: "Hartford, CT 06120",
     phone: null,
     tel: null,
-    detail: "Vehicle detailing, inside and out",
-    specialty: "Auto detailing",
-    serviceIds: ["auto-detailing"],
+    detail: "Auto detailing & window tinting",
+    specialty: "Detailing & window tinting",
+    serviceIds: ["auto-detailing", "window-tinting"],
   },
 ];
 export const services = [
   {
-    id: "electronics-repair",
-    name: "Auto electronics repair",
-    short: "Get your electronics back on track.",
+    id: "car-audio",
+    name: "Car audio & stereo installation",
+    short: "Hear the difference",
     description:
-      "Having trouble with your vehicle’s electronics? Tell our team what’s happening so we can assess the issue and discuss the repair options.",
-    icon: "tools",
+      "Clearer vocals. Fuller bass. The songs you know, with the details you’ve been missing. Build a sound system around your vehicle and the way you listen.",
+    icon: "screen",
     items: [
-      "Vehicle electronics assessment",
-      "Repair options for your vehicle",
-      "Clear updates throughout your service",
+      "Speaker upgrades and component systems",
+      "Subwoofers, enclosures, and amplifiers",
+      "Touchscreen receivers and factory-system integration",
+    ],
+  },
+  {
+    id: "remote-starters",
+    name: "Remote starters",
+    short: "Comfort starts here",
+    description:
+      "Make cold mornings and hot afternoons more comfortable. Explore a remote-start setup that fits your vehicle and your everyday routine.",
+    icon: "screen",
+    items: [
+      "Vehicle and factory-key compatibility review",
+      "Remote range and control options",
+      "Installation planning and system walkthrough",
+    ],
+  },
+  {
+    id: "electronics-replacement",
+    name: "Electronics replacement",
+    short: "Time for an upgrade",
+    description:
+      "Replace outdated or nonworking vehicle electronics at our Wethersfield store. We replace equipment; we do not repair electronics.",
+    icon: "screen",
+    items: [
+      "Replacement receivers, speakers, and electronics",
+      "Vehicle fit and factory-feature compatibility",
+      "Equipment selection and installation planning",
     ],
   },
   {
     id: "auto-detailing",
     name: "Auto detailing",
-    short: "A fresh look for your ride.",
+    short: "A fresh perspective",
     description:
-      "Give your vehicle some extra care with auto detailing work. Talk with our team about your vehicle’s condition and the finish you have in mind.",
+      "Interior and exterior car detailing at our Hartford, Connecticut store. Tell us about your vehicle’s condition and the areas you would like refreshed.",
     icon: "car",
     items: [
-      "Auto detailing work",
-      "Care tailored to your vehicle",
-      "Discuss your needs before your visit",
+      "A conversation about your vehicle’s condition",
+      "Detailing scope tailored to your needs",
+      "Scheduling and care recommendations",
     ],
   },
   {
     id: "electrical-installation",
-    name: "Auto electrical installation",
-    short: "Installed with care.",
+    name: "Electrical installation",
+    short: "Bring your next project",
     description:
-      "Bring your next vehicle electronics project to Action Audio. We’ll discuss your equipment, check compatibility, and plan an installation around your ride.",
+      "Plan your car electronics installation at Action Audio in Wethersfield, near Hartford. Discuss receivers, speakers, and accessories, with compatibility checked for your vehicle.",
     icon: "screen",
     items: [
-      "Automotive electrical installation",
-      "Equipment compatibility consultation",
-      "Installation for your vehicle’s setup",
+      "Equipment and vehicle compatibility",
+      "Installation planning and cable routing",
+      "A walkthrough of your new setup",
+    ],
+  },
+  {
+    id: "window-tinting",
+    name: "Window tinting",
+    short: "Comfort and a cleaner look",
+    description:
+      "Vehicle window tinting at our Hartford store. Tell us which windows you want tinted and whether existing film needs to be removed.",
+    icon: "car",
+    items: [
+      "Window coverage and film options",
+      "Existing tint and removal requirements",
+      "Vehicle-specific installation planning",
+    ],
+  },
+  {
+    id: "dash-cams",
+    name: "Dash cams",
+    short: "A clearer view of your drive",
+    description:
+      "Dash cam installation at Action Audio in Wethersfield. Explore front, rear, and cabin camera setups suited to your vehicle.",
+    icon: "screen",
+    items: [
+      "Front, rear, and cabin camera options",
+      "Cable routing and power connection planning",
+      "Parking-mode and equipment compatibility",
+    ],
+  },
+  {
+    id: "gps-trackers",
+    name: "GPS trackers",
+    short: "Stay connected to your vehicle",
+    description:
+      "GPS tracker installation at our Wethersfield store. Discuss a setup for your vehicle, the features you need, and compatible equipment.",
+    icon: "screen",
+    items: [
+      "Vehicle and tracker compatibility",
+      "Power and mounting requirements",
+      "Connected-service and subscription options",
     ],
   },
 ];

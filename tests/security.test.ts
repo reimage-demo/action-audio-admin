@@ -21,7 +21,7 @@ function booking() {
     email: "private@example.com",
     phone: "8605557890",
     vehicle: "2024 Private Vehicle",
-    service: "electronics-repair",
+    service: "electronics-replacement",
     store: "wethersfield" as const,
     date: d.toISOString().slice(0, 10),
     time: "11:00",

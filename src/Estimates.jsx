@@ -23,7 +23,7 @@ export default function Estimates({ items, onSave, store, Modal }) {
     (a) =>
       (!store || a.store === store) &&
       (!status || a.status === status) &&
-      `${a.name} ${a.phone} ${a.vehicleMake} ${a.vehicleModel} ${serviceName(a.service)}`
+      `${a.name} ${a.phone} ${a.vehicleYear || ""} ${a.vehicleMake} ${a.vehicleModel} ${serviceName(a.service)}`
         .toLowerCase()
         .includes(search.toLowerCase()),
   );
@@ -73,7 +73,7 @@ export default function Estimates({ items, onSave, store, Modal }) {
                   </a>
                 </td>
                 <td>
-                  {a.vehicleMake}
+                  {a.vehicleYear} {a.vehicleMake}
                   <small>{a.vehicleModel}</small>
                 </td>
                 <td>
@@ -133,7 +133,7 @@ function EstimateDialog({ request: a, onSave, onClose, Modal }) {
       <span className="status">{labels[a.status]}</span>
       <h3 className="detail-name">{a.name}</h3>
       <p>
-        {a.vehicleMake} {a.vehicleModel}
+        {a.vehicleYear} {a.vehicleMake} {a.vehicleModel} {a.vehicleTrim}
       </p>
       <dl className="detail-grid">
         <div>
@@ -155,6 +155,32 @@ function EstimateDialog({ request: a, onSave, onClose, Modal }) {
           <dd>{received(a.createdAt)} ET</dd>
         </div>
       </dl>
+      <section className="estimate-intake-summary">
+        <h3>Project details</h3>
+        <p style={{ whiteSpace: "pre-wrap" }}>
+          {a.details || "No additional project details provided."}
+        </p>
+        <dl className="detail-grid">
+          {(a.answers || []).map((answer) => (
+            <div key={answer.id}>
+              <dt>{answer.label}</dt>
+              <dd>{answer.value}</dd>
+            </div>
+          ))}
+          {a.budget && (
+            <div>
+              <dt>Budget</dt>
+              <dd>{a.budget}</dd>
+            </div>
+          )}
+          {a.timing && (
+            <div>
+              <dt>Timing / best time to call</dt>
+              <dd>{a.timing}</dd>
+            </div>
+          )}
+        </dl>
+      </section>
       <a
         className="call-customer"
         href={"tel:" + a.phone.replace(/[^+\d]/g, "")}

@@ -3,15 +3,6 @@
 // Prompts are recorded in assets/original-image-prompts.json.
 export const previewProducts = [
   {
-    name: "S2-S65 6.5-inch speakers",
-    brand: "Alpine",
-    category: "Speakers",
-    description:
-      "Two-way coaxial speakers with integrated tweeters. Rated for 80 watts RMS.",
-    imageUrl: "/assets/gear-speakers.webp",
-    sourceUrl: "https://www.alpine-usa.com/product/s-series-speakers-s2s65",
-  },
-  {
     name: "Punch P3D4-12 subwoofer",
     brand: "Rockford Fosgate",
     category: "Subwoofers",
@@ -47,14 +38,5 @@ export const previewProducts = [
       "A-Series MAX two-way coaxial speakers for an aftermarket vehicle audio system.",
     imageUrl: "/assets/gear-speakers-pair.webp",
     sourceUrl: "https://usa.pioneer/products/ts-a653fh",
-  },
-  {
-    name: "S2-W12D4 12-inch subwoofer",
-    brand: "Alpine",
-    category: "Subwoofers",
-    description:
-      "An S-Series subwoofer with dual 4-ohm voice coils and 600-watt RMS power handling.",
-    imageUrl: "/assets/gear-subwoofer-cone.webp",
-    sourceUrl: "https://www.alpine-usa.com/product/s-series-subwoofer-s2w12d4",
   },
 ];

@@ -1303,3 +1303,55 @@ td small {
 
 body,button,input,select,textarea{font-family:"IBM Plex Sans",Arial,sans-serif;letter-spacing:0}h1,h2,h3{letter-spacing:0;line-height:1.2}button{border-radius:3px}
 .estimate-new{background:#fff0f1;color:#b51d32}.estimate-quoted{background:#edf4ff;color:#1257a8}.call-customer{display:inline-block;background:#1257a8;color:#fff;padding:10px 18px;margin:0 0 22px;border-radius:3px;font-weight:500}.table-scroll td>a{display:block;margin-top:5px;color:#1257a8}.detail-grid dd{overflow-wrap:anywhere}
+.estimate-intake-summary{border-top:1px solid var(--line);padding-top:20px;margin-bottom:24px}.estimate-intake-summary>p{margin-top:12px;overflow-wrap:anywhere}
+
+/* Match the public site's navy, red, and white brand palette. */
+:root{--blue:#175ca5;--line:#dce3ec;--muted:#536174;--brand-navy:#12345b;--brand-red:#c92336;--brand-red-hover:#a61b2b;color:#12345b;background:#f5f7fa}
+button{background:var(--brand-red);border-color:var(--brand-red)}
+button:hover{background:var(--brand-red-hover)}
+.sidebar{background:var(--brand-navy);border-right:0;border-top:5px solid var(--brand-red);color:#fff}
+.sidebar .workspace-label{color:#c4d3e4}
+.sidebar nav button{color:#e5edf6;background:transparent;border-left:3px solid transparent}
+.sidebar nav button:hover{background:#204b78;color:#fff}
+.sidebar nav button.active{background:var(--brand-red);border-left:3px solid #fff;color:#fff}
+.sidebar nav b{color:var(--brand-navy);background:#fff;padding:1px 7px;border-radius:3px}
+.sidebar-bottom{border-color:#496584}
+.sidebar-bottom small,.sidebar .back-link,.sidebar .signout{color:#dce5ef}
+.sidebar .back-link:hover,.sidebar .signout:hover{color:#fff;text-decoration:underline;background:transparent}
+.sidebar .store-mark{background:var(--brand-red);color:#fff;border-color:var(--brand-red)}
+.sidebar .sidebar-close{color:#fff;background:transparent;border:1px solid #7d92aa}
+.workspace-header{background:var(--brand-navy);color:#e5edf6;border-bottom:4px solid var(--brand-red)}
+.workspace-header strong{color:#fff}
+.workspace-header .header-divider{color:#aec2d9}
+.workspace-header .avatar{background:#fff;color:var(--brand-navy)}
+.workspace-header .live-dot{background:#fff}
+.workspace-header .mobile-menu{color:#fff;background:transparent;border-color:#7d92aa}
+.preview-banner{background:#edf3fa;color:#12345b;border-bottom:1px solid #dce3ec}
+.page-top h1{color:var(--brand-navy)}
+.page-top .eyebrow{color:#175ca5}
+.stat-grid{gap:16px;background:transparent;border:0}
+.stat-card{background:#fff;border:1px solid #dce3ec;border-top:4px solid var(--brand-navy);border-radius:4px}
+.stat-card:last-child{border-right:1px solid #dce3ec}
+.stat-card:nth-child(even){border-top-color:var(--brand-red)}
+.stat-card>strong{color:var(--brand-navy)}
+.stat-card:nth-child(even)>strong{color:var(--brand-red)}
+.stat-card:hover{background:#edf3fa;border-color:#93b0cf}
+.panel{border-color:#dce3ec}
+.panel-header{background:var(--brand-navy);color:#fff;border-bottom:3px solid var(--brand-red)}
+.panel-header h2,.panel-header p,.panel-header .text-button{color:#fff}
+.panel-header .text-button:hover{color:#fff;background:#204b78}
+.panel.compact{background:#fff;border:1px solid #dce3ec;border-top:4px solid var(--brand-red);border-radius:4px;padding:22px}
+th{background:#edf3fa;color:#12345b}
+.text-button{background:transparent;border-color:transparent;color:#175ca5}
+.text-button:hover{background:#edf3fa;color:#12345b}
+.vehicle-card{border-top:3px solid var(--brand-navy)}
+.auth-shell{background:var(--brand-navy);border-top:6px solid var(--brand-red)}
+.auth-card{background:#fff;border-top:5px solid var(--brand-red)}
+.auth-card h1{color:var(--brand-navy)}
+.call-customer{background:var(--brand-red);color:#fff}
+.call-customer:hover{background:var(--brand-red-hover);color:#fff}
+.modal{border-top:5px solid var(--brand-red)}
+.modal-heading h2{color:var(--brand-navy)}
+.modal .close{background:#edf3fa;color:#12345b;border-color:#dce3ec}
+.modal .close:hover{background:#dce7f3}
+@media(max-width:600px){.stat-grid{gap:12px}.stat-card{padding:18px}}

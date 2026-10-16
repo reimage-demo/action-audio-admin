@@ -1,15 +1,15 @@
-// Public service information. Booking IDs retain the existing backend categories.
+// Public service information shared by pages, forms, and staff.
 export const serviceContent = [
   {
     id: "car-audio",
-    name: "Car audio",
+    name: "Car audio & stereo installation",
     tag: "Hear the difference",
     headline: "Your music.\nA whole new feeling.",
     description:
       "Clearer vocals. Fuller bass. The songs you know, with the details you’ve been missing. Build a sound system around your vehicle and the way you listen.",
     image: "hero-installation.webp",
     alt: "Illustrative speaker and amplifier installation in a vehicle",
-    booking: "electrical-installation",
+    booking: "car-audio",
     category: "Car audio",
     items: [
       "Speaker upgrades and component systems",
@@ -40,7 +40,7 @@ export const serviceContent = [
       "Make cold mornings and hot afternoons more comfortable. Explore a remote-start setup that fits your vehicle and your everyday routine.",
     image: "hero-remote-start.webp",
     alt: "Illustrative remote-start key fob in front of a silver SUV",
-    booking: "electrical-installation",
+    booking: "remote-starters",
     category: "Remote starters",
     items: [
       "Vehicle and factory-key compatibility review",
@@ -171,33 +171,6 @@ export const serviceContent = [
     ],
   },
   {
-    id: "radar-detectors",
-    name: "Radar detectors",
-    tag: "A considered installation",
-    headline: "Less clutter.\nA cleaner setup.",
-    description:
-      "Explore detector mounting and power options for a tidy interior. Ask about equipment compatibility and installation availability for your vehicle.",
-    image: "service-radar.webp",
-    alt: "Original illustration of a neatly mounted radar detector",
-    booking: "electrical-installation",
-    category: "Radar detectors",
-    items: [
-      "Mounting and placement consultation",
-      "Compatible power and cable-routing options",
-      "Equipment and vehicle fit review",
-    ],
-    detail:
-      "Share the detector model you have or the type of setup you are considering. We can discuss placement, wiring, and whether the equipment can be integrated into your vehicle.",
-    prepare:
-      "Bring the equipment model and accessories, if you already own a detector.",
-    faq: [
-      [
-        "Can you help with equipment I already own?",
-        "Contact the team with its make and model so we can review the installation requirements and confirm service availability.",
-      ],
-    ],
-  },
-  {
     id: "vehicle-accessories",
     name: "Connected accessories",
     tag: "Small upgrades. Everyday impact.",
@@ -225,28 +198,32 @@ export const serviceContent = [
     ],
   },
   {
-    id: "electronics-repair",
-    name: "Electronics repair",
-    tag: "Back to the way it should be",
-    headline: "Less troubleshooting.\nMore enjoying the drive.",
+    id: "electronics-replacement",
+    name: "Electronics replacement",
+    tag: "Time for an upgrade",
+    headline: "Replace your equipment.\nRefresh your drive.",
     description:
-      "Audio cutting out? A receiver that won’t respond? Tell us what’s happening so we can assess the issue and discuss the next step.",
-    image: "service-repair.webp",
-    alt: "Original illustration of bench diagnostics on a car stereo",
-    booking: "electronics-repair",
+      "Replace outdated or nonworking vehicle electronics at our Wethersfield store. We replace equipment; we do not repair electronics.",
+    image: "service-installation.webp",
+    alt: "Illustration of replacement electronics being installed in a dashboard",
+    booking: "electronics-replacement",
     items: [
-      "Vehicle electronics assessment",
-      "Existing equipment and connection review",
-      "Repair options discussed before work proceeds",
+      "Replacement receivers, speakers, and electronics",
+      "Vehicle fit and factory-feature compatibility",
+      "Equipment selection and installation planning",
     ],
     detail:
-      "Describe when the problem started, whether it is intermittent, and any recent changes to the vehicle or equipment. That helps the team understand the symptoms and plan an assessment.",
+      "Tell us what equipment you want to replace and which features you want to keep. We’ll discuss compatible replacement options, installation parts, and the scope before work begins.",
     prepare:
-      "Bring equipment model numbers, any relevant installation records, and a description or video of intermittent symptoms.",
+      "Share your vehicle year, make, model, trim, and the brand or model of the equipment you want to replace.",
     faq: [
       [
-        "Can you quote a repair before seeing the vehicle?",
-        "Some issues need an in-person assessment. Contact us with the symptoms so the team can explain the next step and any assessment charges.",
+        "Do you repair electronics?",
+        "No. We offer replacement and installation of vehicle electronics at our Wethersfield store.",
+      ],
+      [
+        "Where do I go for a replacement?",
+        "Visit 105 Silas Deane Hwy, Wethersfield, CT 06109. Start with an estimate request so we can review your vehicle and equipment.",
       ],
     ],
   },
@@ -256,7 +233,7 @@ export const serviceContent = [
     tag: "A fresh perspective",
     headline: "Fall in love.\nWith your ride again.",
     description:
-      "Give your vehicle some extra care. Talk with us about its current condition and the interior or exterior finish you have in mind.",
+      "Interior and exterior car detailing at our Hartford, Connecticut store. Tell us about your vehicle’s condition and the areas you would like refreshed.",
     image: "service-detailing.webp",
     alt: "Original illustration of a detailer polishing a vehicle hood",
     booking: "auto-detailing",
@@ -274,6 +251,22 @@ export const serviceContent = [
         "How long will detailing take?",
         "Timing depends on the vehicle’s condition and the agreed scope. The team will discuss a schedule when confirming your appointment.",
       ],
+      [
+        "Where is your Hartford car detailing shop?",
+        "Detailing is offered at 2814 Main St, Hartford, CT 06120. The Hartford store is open Monday–Saturday, 9am–6pm, and closed Sundays. Confirm your appointment and holiday hours with the team.",
+      ],
+      [
+        "Can I request interior and exterior detailing?",
+        "Yes. Tell us whether you need interior care, exterior care, or both. Describe stains, odors, sensitive materials, and surface concerns so the team can confirm the available work and scope.",
+      ],
+      [
+        "How much does car detailing cost?",
+        "Pricing depends on vehicle size, condition, and the agreed work. Request an estimate with your vehicle make and model. The team will discuss the details and approximate price before you arrange service.",
+      ],
+      [
+        "How should I prepare for a detailing appointment?",
+        "Remove personal belongings and tell the team about any sensitive surfaces or existing damage. Confirm specific drop-off instructions and timing when your appointment is arranged.",
+      ],
     ],
   },
   {
@@ -282,7 +275,7 @@ export const serviceContent = [
     tag: "Bring your next project",
     headline: "The right equipment.\nThoughtfully installed.",
     description:
-      "Plan your next vehicle electronics project with Action Audio. We’ll discuss your equipment, check compatibility, and help you understand the installation.",
+      "Plan your car electronics installation at Action Audio in Wethersfield, near Hartford. Discuss receivers, speakers, and accessories, with compatibility checked for your vehicle.",
     image: "service-installation.webp",
     alt: "Original illustration of dashboard electronics and wiring installation",
     booking: "electrical-installation",
@@ -300,6 +293,102 @@ export const serviceContent = [
         "Can I bring my own equipment?",
         "Ask the team first. We’ll review the model, condition, and required installation parts before confirming the work.",
       ],
+      [
+        "Where can I book car electronics installation near Hartford?",
+        "Book with the Wethersfield store at 105 Silas Deane Hwy, Wethersfield, CT 06109. Electronics installation is available through this location; the Hartford store offers detailing and window tinting.",
+      ],
+      [
+        "Do I need adapters for an aftermarket receiver?",
+        "Your vehicle and chosen receiver determine the required harnesses, mounting parts, and integration adapters. Share the year, make, model, trim, and equipment model before purchasing installation parts.",
+      ],
+      [
+        "Can I keep my factory vehicle controls?",
+        "Compatibility depends on the vehicle, factory system, new equipment, and available interfaces. Ask the team to review any steering-wheel controls, camera, or factory features you want to retain.",
+      ],
+    ],
+  },
+  {
+    id: "window-tinting",
+    name: "Window tinting",
+    tag: "Comfort and a cleaner look",
+    headline: "A fresh look.\nA more comfortable drive.",
+    description:
+      "Vehicle window tinting at our Hartford store. Tell us which windows you want tinted and whether existing film needs to be removed.",
+    image: "service-tinting.webp",
+    alt: "Illustration of a vehicle with shaded side windows",
+    booking: "window-tinting",
+    items: [
+      "Window coverage and film options",
+      "Existing tint and removal requirements",
+      "Vehicle-specific installation planning",
+    ],
+    detail:
+      "Choose the windows you would like tinted and tell us about any existing film. Our Hartford team will discuss available film options, suitable coverage, and installation requirements before confirming a price.",
+    prepare:
+      "Share your vehicle year, make, model, the windows you want tinted, and whether old tint is already installed.",
+    faq: [
+      [
+        "Where is window tinting offered?",
+        "Window tinting and auto detailing are offered at 2814 Main St, Hartford, CT 06120.",
+      ],
+      [
+        "Can I get an estimate if I’m unsure about the film?",
+        "Yes. Select “Not sure” on the estimate form and tell us your priorities. The team will help you choose a suitable option.",
+      ],
+    ],
+  },
+  {
+    id: "dash-cams",
+    name: "Dash cams",
+    tag: "A clearer view of your drive",
+    headline: "Capture the road.\nKeep the installation tidy.",
+    description:
+      "Dash cam installation at Action Audio in Wethersfield. Explore front, rear, and cabin camera setups suited to your vehicle.",
+    image: "service-dash-cam.webp",
+    alt: "Illustration of a windshield-mounted dash camera",
+    booking: "dash-cams",
+    category: "Dash cams",
+    items: [
+      "Front, rear, and cabin camera options",
+      "Cable routing and power connection planning",
+      "Parking-mode and equipment compatibility",
+    ],
+    detail:
+      "Tell us which views you want to record, whether you own a camera, and whether you want recording while parked. We’ll review power requirements, camera placement, and vehicle compatibility.",
+    prepare:
+      "Have your vehicle details and any camera model numbers ready. Mention parking-mode recording if you want it.",
+    faq: [
+      [
+        "Can you install a dash cam I already own?",
+        "Share the camera make, model, and included wiring kit. The team will review compatibility and confirm the installation scope.",
+      ],
+    ],
+  },
+  {
+    id: "gps-trackers",
+    name: "GPS trackers",
+    tag: "Stay connected to your vehicle",
+    headline: "Know your vehicle.\nWherever the day goes.",
+    description:
+      "GPS tracker installation at our Wethersfield store. Discuss a setup for your vehicle, the features you need, and compatible equipment.",
+    image: "service-gps.webp",
+    alt: "Illustration of a GPS location marker and a vehicle route",
+    booking: "gps-trackers",
+    category: "GPS trackers",
+    items: [
+      "Vehicle and tracker compatibility",
+      "Power and mounting requirements",
+      "Connected-service and subscription options",
+    ],
+    detail:
+      "Let us know whether you already own a tracker, how many vehicles need equipment, and the features you’re looking for. We’ll discuss installation and any required connected service before you choose a setup.",
+    prepare:
+      "Share the vehicle details, tracker model if you have one, and whether the request covers one vehicle or a fleet.",
+    faq: [
+      [
+        "Does a GPS tracker need a subscription?",
+        "Some trackers require a connected service. The team will discuss equipment requirements and any recurring fees for the option you choose.",
+      ],
     ],
   },
 ];
@@ -310,6 +399,7 @@ export const electronicsCategories = [
   "Motorcycle audio",
   "Video systems",
   "Power liftgates",
-  "Radar detectors",
   "Accessories",
+  "Dash cams",
+  "GPS trackers",
 ];
