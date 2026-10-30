@@ -1,8 +1,8 @@
 # Action Audio — Staff portal
 
-Live site: https://reimage-demo.github.io/action-audio-admin/
+Live site: https://admin.actionaudiostorellc.com/
 
-Public landing page for QR codes: https://reimage-demo.github.io/action-audio/landing-page.html
+Public landing page for QR codes: https://www.actionaudiostorellc.com/landing-page.html
 
 Source lives on main; GitHub Pages serves the compiled gh-pages branch.
 
@@ -24,8 +24,8 @@ Both live sites use the Action Audio production deployment standing-elephant-145
 
 New appointments and estimate requests can queue a Pushover phone alert in the same transaction as the encrypted intake. Duplicate submissions return their original result without adding another alert. Notifications identify the request type and link to the staff portal; customer names, contact information, vehicle details, notes, and tracking codes stay out of push messages and the notification queue.
 
-Set `PUSHOVER_APP_TOKEN`, `PUSHOVER_USER_KEY`, `PUSHOVER_DEVICE=iphone`, `PUSHOVER_PORTAL_URL=https://reimage-demo.github.io/action-audio-admin/`, and `PUSHOVER_ENABLED=true` in the production Convex environment. Keep development disabled. These values must never be included in frontend bundles or committed credential files. The portal URL can be updated independently during the later domain migration.
+Set `PUSHOVER_APP_TOKEN`, `PUSHOVER_USER_KEY`, `PUSHOVER_DEVICE=iphone`, `PUSHOVER_PORTAL_URL=https://admin.actionaudiostorellc.com/`, and `PUSHOVER_ENABLED=true` in the production Convex environment. Keep development disabled. These values must never be included in frontend bundles or committed credential files. The portal URL is configured independently in the production Convex environment.
 
 `notificationDeliveries` records pending/sent/failed state and Pushover receipt IDs. Network/server errors retry after 30 seconds, 2 minutes, 10 minutes, and 1 hour, then retain a failed record for investigation. Invalid credentials and quota/client errors stop immediately. A successful API response means Pushover accepted the alert; verify actual receipt on the phone during setup. A connection failure after Pushover accepts a message can result in a duplicate on retry because the provider has no message idempotency key. Alerts use normal priority and honor phone settings. The recipient's iOS app currently shows a trial license.
 
-The Action Audio LLC application is registered in Pushover with the existing logo, and its credentials are configured only in production Convex. Local validation: all 42 tests and TypeScript checks pass. Live tests created one appointment request and one estimate request through the production intake mutations, then repeated both submissions to verify idempotency. Exactly two alerts were accepted by Pushover, each on its first attempt; Pushover's dashboard independently showed two messages. The synthetic intake and delivery records were removed after saving local receipt evidence. Actual display on the recipient's phone awaits her confirmation. Local credential backup: `.env.pushover.local`, owner-readable and excluded from Git. DNS was not changed.
+The Action Audio LLC application is registered in Pushover with the existing logo, and its credentials are configured only in production Convex. Local validation: all 42 tests and TypeScript checks pass. Live tests created one appointment request and one estimate request through the production intake mutations, then repeated both submissions to verify idempotency. Exactly two alerts were accepted by Pushover, each on its first attempt; Pushover's dashboard independently showed two messages. The synthetic intake and delivery records were removed after saving local receipt evidence. The user confirmed both alerts arrived on the recipient's iPhone. Local credential backup: `.env.pushover.local`, owner-readable and excluded from Git. The later domain migration uses the existing authenticated `reimage-demo` GitHub owner account to publish the backend source together with the domain configuration.
