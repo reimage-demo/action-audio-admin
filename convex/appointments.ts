@@ -6,6 +6,7 @@ import type { Doc } from "./_generated/dataModel";
 import { blindIndex, encrypt, decrypt } from "./lib/encryption";
 import { store, status } from "./lib/validators";
 import { requireAdmin } from "./lib/requireAdmin";
+import { enqueueNotification } from "./notifications";
 const times = [
   "09:00",
   "10:00",
@@ -190,10 +191,11 @@ export const create = mutation({
       slotHash,
       trackingHash: blindIndex("tracking", trackingCode),
     };
-    await ctx.db.insert("appointments", {
+    const appointmentId = await ctx.db.insert("appointments", {
       ...indexes,
       encrypted: await encrypt(booking, context(indexes)),
     });
+    await enqueueNotification(ctx, "appointment", appointmentId);
     return { trackingCode };
   },
 });

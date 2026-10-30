@@ -5,6 +5,7 @@ import { estimateQuestions } from "../shared/estimate-intake.js";
 import { serviceStore } from "../shared/catalog.js";
 import { blindIndex, encrypt, decrypt } from "./lib/encryption";
 import { requireAdmin } from "./lib/requireAdmin";
+import { enqueueNotification } from "./notifications";
 import type { Doc } from "./_generated/dataModel";
 const estimateStatus = v.union(
   v.literal("new"),
@@ -179,10 +180,11 @@ export const create = mutation({
       updatedAt: Date.now(),
     };
     const indexes = { requestHash, phoneHash };
-    await ctx.db.insert("estimates", {
+    const estimateId = await ctx.db.insert("estimates", {
       ...indexes,
       encrypted: await encrypt(estimate, context(indexes)),
     });
+    await enqueueNotification(ctx, "estimate", estimateId);
     return { received: true };
   },
 });

@@ -17,6 +17,7 @@ import type * as lib_encryption from "../lib/encryption.js";
 import type * as lib_password from "../lib/password.js";
 import type * as lib_requireAdmin from "../lib/requireAdmin.js";
 import type * as lib_validators from "../lib/validators.js";
+import type * as notifications from "../notifications.js";
 import type * as staff from "../staff.js";
 
 import type {
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   "lib/password": typeof lib_password;
   "lib/requireAdmin": typeof lib_requireAdmin;
   "lib/validators": typeof lib_validators;
+  notifications: typeof notifications;
   staff: typeof staff;
 }>;
 
