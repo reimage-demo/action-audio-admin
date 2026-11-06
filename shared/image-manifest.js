@@ -210,6 +210,95 @@ export const imageManifest = {
       }
     ]
   },
+  "service-audio-led.webp": {
+    "width": 1600,
+    "height": 1068,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-audio-led-480-hq.avif",
+        "webp": "/assets/optimized/service-audio-led-480-hq.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-audio-led-800-hq.avif",
+        "webp": "/assets/optimized/service-audio-led-800-hq.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-audio-led-1200-hq.avif",
+        "webp": "/assets/optimized/service-audio-led-1200-hq.webp"
+      },
+      {
+        "width": 1600,
+        "avif": "/assets/optimized/service-audio-led-1600-hq.avif",
+        "webp": "/assets/optimized/service-audio-led-1600-hq.webp"
+      }
+    ]
+  },
+  "service-blackvue.webp": {
+    "width": 1500,
+    "height": 1125,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-blackvue-480.avif",
+        "webp": "/assets/optimized/service-blackvue-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-blackvue-800.avif",
+        "webp": "/assets/optimized/service-blackvue-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-blackvue-1200.avif",
+        "webp": "/assets/optimized/service-blackvue-1200.webp"
+      },
+      {
+        "width": 1500,
+        "avif": "/assets/optimized/service-blackvue-1500.avif",
+        "webp": "/assets/optimized/service-blackvue-1500.webp"
+      }
+    ]
+  },
+  "service-carplay-android.webp": {
+    "width": 500,
+    "height": 500,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-carplay-android-480.avif",
+        "webp": "/assets/optimized/service-carplay-android-480.webp"
+      },
+      {
+        "width": 500,
+        "avif": "/assets/optimized/service-carplay-android-500.avif",
+        "webp": "/assets/optimized/service-carplay-android-500.webp"
+      }
+    ]
+  },
+  "service-connected-security.webp": {
+    "width": 1000,
+    "height": 1000,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-connected-security-480.avif",
+        "webp": "/assets/optimized/service-connected-security-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-connected-security-800.avif",
+        "webp": "/assets/optimized/service-connected-security-800.webp"
+      },
+      {
+        "width": 1000,
+        "avif": "/assets/optimized/service-connected-security-1000.avif",
+        "webp": "/assets/optimized/service-connected-security-1000.webp"
+      }
+    ]
+  },
   "service-dash-cam.webp": {
     "width": 800,
     "height": 600,
@@ -223,6 +312,32 @@ export const imageManifest = {
         "width": 800,
         "avif": "/assets/optimized/service-dash-cam-800.avif",
         "webp": "/assets/optimized/service-dash-cam-800.webp"
+      }
+    ]
+  },
+  "service-dash-scene.webp": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-dash-scene-480.avif",
+        "webp": "/assets/optimized/service-dash-scene-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-dash-scene-800.avif",
+        "webp": "/assets/optimized/service-dash-scene-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-dash-scene-1200.avif",
+        "webp": "/assets/optimized/service-dash-scene-1200.webp"
+      },
+      {
+        "width": 1536,
+        "avif": "/assets/optimized/service-dash-scene-1536.avif",
+        "webp": "/assets/optimized/service-dash-scene-1536.webp"
       }
     ]
   },
@@ -244,6 +359,79 @@ export const imageManifest = {
         "width": 1200,
         "avif": "/assets/optimized/service-detailing-1200-hq.avif",
         "webp": "/assets/optimized/service-detailing-1200-hq.webp"
+      }
+    ]
+  },
+  "service-dronemobile-gps.webp": {
+    "width": 1600,
+    "height": 709,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-dronemobile-gps-480.avif",
+        "webp": "/assets/optimized/service-dronemobile-gps-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-dronemobile-gps-800.avif",
+        "webp": "/assets/optimized/service-dronemobile-gps-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-dronemobile-gps-1200.avif",
+        "webp": "/assets/optimized/service-dronemobile-gps-1200.webp"
+      },
+      {
+        "width": 1600,
+        "avif": "/assets/optimized/service-dronemobile-gps-1600.avif",
+        "webp": "/assets/optimized/service-dronemobile-gps-1600.webp"
+      }
+    ]
+  },
+  "service-family-entertainment.webp": {
+    "width": 1200,
+    "height": 900,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-family-entertainment-480.avif",
+        "webp": "/assets/optimized/service-family-entertainment-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-family-entertainment-800.avif",
+        "webp": "/assets/optimized/service-family-entertainment-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-family-entertainment-1200.avif",
+        "webp": "/assets/optimized/service-family-entertainment-1200.webp"
+      }
+    ]
+  },
+  "service-gps-scene.webp": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-gps-scene-480.avif",
+        "webp": "/assets/optimized/service-gps-scene-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-gps-scene-800.avif",
+        "webp": "/assets/optimized/service-gps-scene-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-gps-scene-1200.avif",
+        "webp": "/assets/optimized/service-gps-scene-1200.webp"
+      },
+      {
+        "width": 1536,
+        "avif": "/assets/optimized/service-gps-scene-1536.avif",
+        "webp": "/assets/optimized/service-gps-scene-1536.webp"
       }
     ]
   },
@@ -326,6 +514,32 @@ export const imageManifest = {
       }
     ]
   },
+  "service-phone-start.webp": {
+    "width": 1293,
+    "height": 1600,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-phone-start-480.avif",
+        "webp": "/assets/optimized/service-phone-start-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-phone-start-800.avif",
+        "webp": "/assets/optimized/service-phone-start-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-phone-start-1200.avif",
+        "webp": "/assets/optimized/service-phone-start-1200.webp"
+      },
+      {
+        "width": 1293,
+        "avif": "/assets/optimized/service-phone-start-1293.avif",
+        "webp": "/assets/optimized/service-phone-start-1293.webp"
+      }
+    ]
+  },
   "service-radar.webp": {
     "width": 1200,
     "height": 800,
@@ -344,6 +558,58 @@ export const imageManifest = {
         "width": 1200,
         "avif": "/assets/optimized/service-radar-1200.avif",
         "webp": "/assets/optimized/service-radar-1200.webp"
+      }
+    ]
+  },
+  "service-radio-scene.webp": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-radio-scene-480.avif",
+        "webp": "/assets/optimized/service-radio-scene-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-radio-scene-800.avif",
+        "webp": "/assets/optimized/service-radio-scene-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-radio-scene-1200.avif",
+        "webp": "/assets/optimized/service-radio-scene-1200.webp"
+      },
+      {
+        "width": 1536,
+        "avif": "/assets/optimized/service-radio-scene-1536.avif",
+        "webp": "/assets/optimized/service-radio-scene-1536.webp"
+      }
+    ]
+  },
+  "service-remote-scene.webp": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-remote-scene-480-hq.avif",
+        "webp": "/assets/optimized/service-remote-scene-480-hq.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-remote-scene-800-hq.avif",
+        "webp": "/assets/optimized/service-remote-scene-800-hq.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-remote-scene-1200-hq.avif",
+        "webp": "/assets/optimized/service-remote-scene-1200-hq.webp"
+      },
+      {
+        "width": 1536,
+        "avif": "/assets/optimized/service-remote-scene-1536-hq.avif",
+        "webp": "/assets/optimized/service-remote-scene-1536-hq.webp"
       }
     ]
   },
@@ -368,6 +634,79 @@ export const imageManifest = {
       }
     ]
   },
+  "service-replacement-receiver.webp": {
+    "width": 810,
+    "height": 810,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-replacement-receiver-480.avif",
+        "webp": "/assets/optimized/service-replacement-receiver-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-replacement-receiver-800.avif",
+        "webp": "/assets/optimized/service-replacement-receiver-800.webp"
+      },
+      {
+        "width": 810,
+        "avif": "/assets/optimized/service-replacement-receiver-810.avif",
+        "webp": "/assets/optimized/service-replacement-receiver-810.webp"
+      }
+    ]
+  },
+  "service-replacement-scene.webp": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-replacement-scene-480.avif",
+        "webp": "/assets/optimized/service-replacement-scene-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-replacement-scene-800.avif",
+        "webp": "/assets/optimized/service-replacement-scene-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-replacement-scene-1200.avif",
+        "webp": "/assets/optimized/service-replacement-scene-1200.webp"
+      },
+      {
+        "width": 1536,
+        "avif": "/assets/optimized/service-replacement-scene-1536.avif",
+        "webp": "/assets/optimized/service-replacement-scene-1536.webp"
+      }
+    ]
+  },
+  "service-security-scene.webp": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-security-scene-480.avif",
+        "webp": "/assets/optimized/service-security-scene-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-security-scene-800.avif",
+        "webp": "/assets/optimized/service-security-scene-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-security-scene-1200.avif",
+        "webp": "/assets/optimized/service-security-scene-1200.webp"
+      },
+      {
+        "width": 1536,
+        "avif": "/assets/optimized/service-security-scene-1536.avif",
+        "webp": "/assets/optimized/service-security-scene-1536.webp"
+      }
+    ]
+  },
   "service-security.webp": {
     "width": 1200,
     "height": 800,
@@ -386,6 +725,126 @@ export const imageManifest = {
         "width": 1200,
         "avif": "/assets/optimized/service-security-1200.avif",
         "webp": "/assets/optimized/service-security-1200.webp"
+      }
+    ]
+  },
+  "service-slingshot.webp": {
+    "width": 1600,
+    "height": 900,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-slingshot-480.avif",
+        "webp": "/assets/optimized/service-slingshot-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-slingshot-800.avif",
+        "webp": "/assets/optimized/service-slingshot-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-slingshot-1200.avif",
+        "webp": "/assets/optimized/service-slingshot-1200.webp"
+      },
+      {
+        "width": 1600,
+        "avif": "/assets/optimized/service-slingshot-1600.avif",
+        "webp": "/assets/optimized/service-slingshot-1600.webp"
+      }
+    ]
+  },
+  "service-soap-wash.webp": {
+    "width": 1600,
+    "height": 1067,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-soap-wash-480-hq.avif",
+        "webp": "/assets/optimized/service-soap-wash-480-hq.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-soap-wash-800-hq.avif",
+        "webp": "/assets/optimized/service-soap-wash-800-hq.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-soap-wash-1200-hq.avif",
+        "webp": "/assets/optimized/service-soap-wash-1200-hq.webp"
+      },
+      {
+        "width": 1600,
+        "avif": "/assets/optimized/service-soap-wash-1600-hq.avif",
+        "webp": "/assets/optimized/service-soap-wash-1600-hq.webp"
+      }
+    ]
+  },
+  "service-thinkware.webp": {
+    "width": 1600,
+    "height": 1200,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-thinkware-480.avif",
+        "webp": "/assets/optimized/service-thinkware-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-thinkware-800.avif",
+        "webp": "/assets/optimized/service-thinkware-800.webp"
+      },
+      {
+        "width": 1200,
+        "avif": "/assets/optimized/service-thinkware-1200.avif",
+        "webp": "/assets/optimized/service-thinkware-1200.webp"
+      },
+      {
+        "width": 1600,
+        "avif": "/assets/optimized/service-thinkware-1600.avif",
+        "webp": "/assets/optimized/service-thinkware-1600.webp"
+      }
+    ]
+  },
+  "service-tint-application.webp": {
+    "width": 845,
+    "height": 684,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-tint-application-480.avif",
+        "webp": "/assets/optimized/service-tint-application-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-tint-application-800.avif",
+        "webp": "/assets/optimized/service-tint-application-800.webp"
+      },
+      {
+        "width": 845,
+        "avif": "/assets/optimized/service-tint-application-845.avif",
+        "webp": "/assets/optimized/service-tint-application-845.webp"
+      }
+    ]
+  },
+  "service-tint-installation.webp": {
+    "width": 900,
+    "height": 1600,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/service-tint-installation-480.avif",
+        "webp": "/assets/optimized/service-tint-installation-480.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/service-tint-installation-800.avif",
+        "webp": "/assets/optimized/service-tint-installation-800.webp"
+      },
+      {
+        "width": 900,
+        "avif": "/assets/optimized/service-tint-installation-900.avif",
+        "webp": "/assets/optimized/service-tint-installation-900.webp"
       }
     ]
   },

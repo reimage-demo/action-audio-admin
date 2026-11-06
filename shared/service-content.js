@@ -7,8 +7,8 @@ export const serviceContent = [
     headline: "Your music.\nA whole new feeling.",
     description:
       "Clearer vocals. Fuller bass. The songs you know, with the details you’ve been missing. Build a sound system around your vehicle and the way you listen.",
-    image: "hero-installation.webp",
-    alt: "Illustrative speaker and amplifier installation in a vehicle",
+    image: "service-audio-led.webp",
+    alt: "Custom trunk sound system with large subwoofers and vivid green LED lighting",
     booking: "car-audio",
     category: "Car audio",
     items: [
@@ -30,6 +30,8 @@ export const serviceContent = [
         "Not necessarily. Share what you’d like to improve and we can discuss a focused upgrade or a complete system.",
       ],
     ],
+    teaser: "Big bass. Brilliant sound. A system worth showing off.",
+    updated: "2026-11-06",
   },
   {
     id: "remote-starters",
@@ -37,18 +39,18 @@ export const serviceContent = [
     tag: "Comfort starts here",
     headline: "A better start.\nBefore you step inside.",
     description:
-      "Make cold mornings and hot afternoons more comfortable. Explore a remote-start setup that fits your vehicle and your everyday routine.",
-    image: "hero-remote-start.webp",
-    alt: "Illustrative remote-start key fob in front of a silver SUV",
+      "Start your day from your phone. Explore compatible remote starters with smartphone control, two-way confirmation, and convenient lock and unlock features.",
+    image: "service-remote-scene.webp",
+    alt: "Illustration of phone remote-start controls beside a blue SUV",
     booking: "remote-starters",
     category: "Remote starters",
     items: [
-      "Vehicle and factory-key compatibility review",
-      "Remote range and control options",
-      "Installation planning and system walkthrough",
+      "Smartphone start, lock, and unlock options",
+      "Two-way remotes and vehicle-status confirmation",
+      "Vehicle compatibility, LTE coverage, and subscription review",
     ],
     detail:
-      "The right remote starter depends on your vehicle’s ignition, security system, and the range you need. Our team can discuss compatible options and any additional integration hardware before an installation is scheduled.",
+      "Connected systems such as DroneMobile pair a phone app with compatible remote-start hardware. Ask about starting your vehicle, checking its status, and using a remote alongside your phone. Features depend on the vehicle, installed equipment, cellular coverage, and selected subscription.",
     prepare:
       "Have your year, make, model, transmission type, and number of working keys ready. Ask the team which keys to bring to your appointment.",
     faq: [
@@ -61,6 +63,18 @@ export const serviceContent = [
         "Some systems offer smartphone control through additional hardware and a connected service. Ask about compatible options and any recurring fees.",
       ],
     ],
+    teaser: "Start, lock, and unlock from your phone.",
+    examples: [
+      {
+        image: "service-phone-start.webp",
+        alt: "DroneMobile smartphone start, lock, and unlock controls beside a Firstech connected module",
+        name: "DroneMobile X2 smartphone-control example",
+        description:
+          "Equipment example to discuss with our team. Compatibility and connected features depend on the selected system.",
+        url: "https://www.dronemobile.com/products/x2-lte",
+      },
+    ],
+    updated: "2026-11-06",
   },
   {
     id: "car-alarms",
@@ -68,18 +82,18 @@ export const serviceContent = [
     tag: "A little more peace of mind",
     headline: "More confidence.\nWherever you park.",
     description:
-      "Explore vehicle security options, from alarm systems to convenient keyless entry. Start with a conversation about your vehicle and what you want to protect.",
-    image: "service-security.webp",
-    alt: "Original illustration of car alarm equipment and security installation",
+      "Bring your vehicle security up to date with two-way alarm alerts, a color-screen remote, and compatible smartphone notifications. Discuss a setup that fits your vehicle.",
+    image: "service-security-scene.webp",
+    alt: "Illustration of a phone security alert and two-way remote beside a car",
     booking: "electrical-installation",
     category: "Security",
     items: [
-      "Alarm and keyless-entry options",
-      "Factory security compatibility",
-      "Sensor and remote-control options",
+      "Two-way security alerts and color-screen remote options",
+      "Compatible smartphone notifications and vehicle status",
+      "Impact, tilt, and motion sensor options",
     ],
     detail:
-      "A security system should fit the way you use your vehicle. We’ll discuss the features you need and how an aftermarket system may work with your existing locks, keys, and factory electronics.",
+      "Modern systems can combine a remote, vehicle sensors, and a connected phone app. The Compustar PRO T13 is one example of a two-way LCD remote with smartphone-control support. Alarm functions require compatible security hardware; connected features depend on equipment, coverage, and subscription.",
     prepare:
       "Tell us about your existing alarm or remote starter and any issues you are experiencing.",
     faq: [
@@ -88,6 +102,18 @@ export const serviceContent = [
         "Some systems combine both. Compatibility and integration needs must be checked for your particular vehicle.",
       ],
     ],
+    teaser: "Two-way alerts and connected security at a glance.",
+    examples: [
+      {
+        image: "service-connected-security.webp",
+        alt: "Compustar PRO T13 color-screen security remote alongside the DroneMobile phone app",
+        name: "Compustar PRO T13",
+        description:
+          "Equipment example to discuss with our team. Compatibility and connected features depend on the selected system.",
+        url: "https://www.compustar.com/remotes/pro-t13-w-lte/",
+      },
+    ],
+    updated: "2026-11-06",
   },
   {
     id: "motorcycle-audio",
@@ -122,18 +148,18 @@ export const serviceContent = [
     tag: "More ways to enjoy the ride",
     headline: "Make the back seat.\nThe best seat.",
     description:
-      "Explore seatback and overhead video options for passengers, along with receivers that bring modern connectivity to the dashboard.",
-    image: "service-video.webp",
-    alt: "Original illustration of rear-seat entertainment screens in a vehicle",
+      "Give passengers their own entertainment. Explore dual seatback screens, streaming-app options, and headphones for family road trips.",
+    image: "service-family-entertainment.webp",
+    alt: "Children wearing headphones watch dual rear-seat screens, with streaming app icons between the seats",
     booking: "electrical-installation",
     category: "Video systems",
     items: [
-      "Seatback and drop-down video inquiries",
-      "Touchscreen receiver options",
-      "Source, power, and mounting compatibility",
+      "Dual seatback or overhead screen options",
+      "Streaming apps, device connections, and headphones",
+      "Wi-Fi, subscriptions, power, and secure mounting review",
     ],
     detail:
-      "Screen placement and vehicle compatibility matter. Tell us who will use the system, the devices you want to connect, and the type of entertainment you have in mind. Our team can confirm available options and installation requirements.",
+      "Tell us which apps and devices your passengers use. We’ll review screen placement, vehicle fit, internet access, and compatible media sources. Streaming services may need Wi-Fi and separate subscriptions; app availability varies by system.",
     prepare:
       "Bring vehicle details and information about the phones, streaming devices, or media sources you plan to use.",
     faq: [
@@ -142,60 +168,45 @@ export const serviceContent = [
         "Compatible aftermarket receivers may support these features. Vehicle fit, phone compatibility, and wired or wireless support depend on the receiver.",
       ],
     ],
+    teaser: "Rear-seat screens, favorite apps, happier passengers.",
+    imageCredit: {
+      label: "VOXX rear-seat entertainment example",
+      url: "https://www.crutchfield.com/p_220SB10UH/VOXX-AMAVXSB10UHD2.html",
+    },
+    updated: "2026-11-06",
   },
   {
-    id: "power-liftgates",
-    name: "Power liftgates",
-    tag: "Everyday convenience",
-    headline: "A little lift.\nA lot of convenience.",
+    id: "motorsport-upgrades",
+    name: "Motorsport upgrades",
+    tag: "Built for the open air",
+    headline: "Your Slingshot.\nYour soundtrack.",
     description:
-      "Interested in adding powered access to your cargo area? Ask our team about vehicle-specific liftgate options and installation availability.",
-    image: "service-liftgate.webp",
-    alt: "Original illustration of a powered SUV liftgate",
+      "Make your Slingshot sound as bold as it looks. Explore speakers, amplifiers, and connected audio upgrades suited to open-air motorsports.",
+    image: "service-slingshot.webp",
+    alt: "Green Polaris Slingshot Grand Touring on the road",
     booking: "electrical-installation",
-    category: "Power liftgates",
+    category: "Motorsport upgrades",
     items: [
-      "Vehicle-specific kit availability",
-      "Control and opening-height options",
-      "Installation and compatibility consultation",
+      "Slingshot speaker and amplifier upgrades",
+      "Weather exposure, mounting, and power planning",
+      "Receiver and smartphone-connectivity options",
     ],
     detail:
-      "Power liftgate systems are vehicle-specific. The first step is checking whether a suitable kit exists for your exact vehicle and what modifications it requires. Our team will confirm available service options before you book installation.",
+      "Open-air vehicles need equipment selected for their layout and riding conditions. Tell our Wethersfield team about your Polaris Slingshot, your current system, and the sound you want. We’ll review suitable equipment and installation options for your model.",
     prepare:
-      "Share your year, make, model, and trim, and whether your liftgate is currently manual or powered.",
+      "Share your Slingshot’s year, model, existing audio equipment, and the upgrades you have in mind.",
     faq: [
       [
-        "Is every SUV compatible?",
-        "No. Kit availability and installation requirements vary by vehicle and trim. Contact us for a compatibility review.",
+        "Can I upgrade my Slingshot’s factory audio?",
+        "Ask us to review your model year and existing system. Speaker fit, amplifier power, weather exposure, and factory integration determine the available options.",
       ],
     ],
-  },
-  {
-    id: "vehicle-accessories",
-    name: "Connected accessories",
-    tag: "Small upgrades. Everyday impact.",
-    headline: "Your car.\nMore connected.",
-    description:
-      "Explore convenient additions such as smartphone integration, satellite radio, and garage-door controls. Find out what works with your existing electronics.",
-    image: "service-accessories.webp",
-    alt: "Original illustration of vehicle charging and connectivity accessories",
-    booking: "electrical-installation",
-    category: "Accessories",
-    items: [
-      "Satellite radio and SiriusXM integration inquiries",
-      "HomeLink and convenience accessory inquiries",
-      "Factory system and receiver compatibility",
-    ],
-    detail:
-      "An accessory should feel like it belongs in your vehicle. Tell us what you want to add and we’ll review equipment compatibility, available installation options, and any required subscriptions or adapters.",
-    prepare:
-      "Share vehicle details and the model of your factory or aftermarket receiver.",
-    faq: [
-      [
-        "Does a new accessory require a new radio?",
-        "It depends on the accessory and your current system. Some use adapters; others need a compatible receiver. We’ll help you understand the options.",
-      ],
-    ],
+    teaser: "Audio and electronics upgrades for your Slingshot.",
+    imageCredit: {
+      label: "Polaris Slingshot vehicle example",
+      url: "https://www.carscoops.com/2025/12/embargo-polaris-slingshot-grand-touring-returns-as-a-mean-green-3-wheeler/",
+    },
+    updated: "2026-11-06",
   },
   {
     id: "electronics-replacement",
@@ -203,9 +214,9 @@ export const serviceContent = [
     tag: "Time for an upgrade",
     headline: "Replace your equipment.\nRefresh your drive.",
     description:
-      "Replace outdated or nonworking vehicle electronics at our Wethersfield store. We replace equipment; we do not repair electronics.",
-    image: "service-installation.webp",
-    alt: "Illustration of replacement electronics being installed in a dashboard",
+      "Replace an outdated stereo, worn speakers, or nonworking vehicle electronics. Explore modern touchscreen receivers and compatible replacement equipment at our Wethersfield store.",
+    image: "service-replacement-scene.webp",
+    alt: "Illustration of a technician replacing a factory stereo and connecting its wiring",
     booking: "electronics-replacement",
     items: [
       "Replacement receivers, speakers, and electronics",
@@ -226,6 +237,18 @@ export const serviceContent = [
         "Visit 105 Silas Deane Hwy, Wethersfield, CT 06109. Start with an estimate request so we can review your vehicle and equipment.",
       ],
     ],
+    teaser: "Replace outdated equipment with a connected receiver.",
+    examples: [
+      {
+        image: "service-replacement-receiver.webp",
+        alt: "Sony XAV-AX6000 touchscreen receiver with wireless CarPlay and Android Auto branding",
+        name: "Sony XAV-AX6000 replacement receiver example",
+        description:
+          "Equipment example to discuss with our team. Compatibility and connected features depend on the selected system.",
+        url: "https://www.rapidradio.co.nz/products/sony-xav-ax6000",
+      },
+    ],
+    updated: "2026-11-06",
   },
   {
     id: "auto-detailing",
@@ -234,8 +257,8 @@ export const serviceContent = [
     headline: "Fall in love.\nWith your ride again.",
     description:
       "Interior and exterior car detailing at our Hartford, Connecticut store. Tell us about your vehicle’s condition and the areas you would like refreshed.",
-    image: "service-detailing.webp",
-    alt: "Original illustration of a detailer polishing a vehicle hood",
+    image: "service-soap-wash.webp",
+    alt: "A white SUV covered in soap and foam during an exterior wash",
     booking: "auto-detailing",
     items: [
       "A conversation about your vehicle’s condition",
@@ -268,24 +291,26 @@ export const serviceContent = [
         "Remove personal belongings and tell the team about any sensitive surfaces or existing damage. Confirm specific drop-off instructions and timing when your appointment is arranged.",
       ],
     ],
+    teaser: "Soap, suds, and a fresh start for your vehicle.",
+    updated: "2026-11-06",
   },
   {
     id: "electrical-installation",
-    name: "Electrical installation",
+    name: "Radio & electronics installation",
     tag: "Bring your next project",
     headline: "The right equipment.\nThoughtfully installed.",
     description:
-      "Plan your car electronics installation at Action Audio in Wethersfield, near Hartford. Discuss receivers, speakers, and accessories, with compatibility checked for your vehicle.",
-    image: "service-installation.webp",
-    alt: "Original illustration of dashboard electronics and wiring installation",
+      "Bring Apple CarPlay and Android Auto to your dashboard with a compatible touchscreen radio. Plan your receiver and electronics installation with our Wethersfield team.",
+    image: "service-radio-scene.webp",
+    alt: "Illustration of a finished touchscreen radio upgrade with Apple CarPlay",
     booking: "electrical-installation",
     items: [
-      "Equipment and vehicle compatibility",
-      "Installation planning and cable routing",
-      "A walkthrough of your new setup",
+      "Apple CarPlay and Android Auto receiver upgrades",
+      "Wired or wireless phone connectivity, depending on equipment",
+      "Dash fit, wiring, and factory-control integration",
     ],
     detail:
-      "From an aftermarket receiver to a more involved electronics upgrade, the details start with your vehicle and the equipment you choose. Contact the team to discuss the project before purchasing parts.",
+      "Turn an older dashboard into a more connected drive. Compatible aftermarket radios put navigation, music, calls, and voice controls within reach. We’ll review your phone, vehicle, receiver, and adapters, including any factory camera or steering-wheel controls you want to keep.",
     prepare:
       "Have your vehicle details and equipment model numbers ready, including any adapters or accessories you already have.",
     faq: [
@@ -306,6 +331,18 @@ export const serviceContent = [
         "Compatibility depends on the vehicle, factory system, new equipment, and available interfaces. Ask the team to review any steering-wheel controls, camera, or factory features you want to retain.",
       ],
     ],
+    teaser: "Upgrade to Apple CarPlay and Android Auto.",
+    examples: [
+      {
+        image: "service-carplay-android.webp",
+        alt: "Sony touchscreen radio showing Apple CarPlay apps with Apple CarPlay and Android Auto logos",
+        name: "Sony CarPlay and Android Auto receiver example",
+        description:
+          "Equipment example to discuss with our team. Compatibility and connected features depend on the selected system.",
+        url: "https://electronics.sony.com/audio/car-marine-audio/receiver-players/p/xavax6000",
+      },
+    ],
+    updated: "2026-11-06",
   },
   {
     id: "window-tinting",
@@ -314,8 +351,8 @@ export const serviceContent = [
     headline: "A fresh look.\nA more comfortable drive.",
     description:
       "Vehicle window tinting at our Hartford store. Tell us which windows you want tinted and whether existing film needs to be removed.",
-    image: "service-tinting.webp",
-    alt: "Illustration of a vehicle with shaded side windows",
+    image: "service-tint-application.webp",
+    alt: "A LLumar installer applying window tint with a squeegee on an open car door",
     booking: "window-tinting",
     items: [
       "Window coverage and film options",
@@ -336,6 +373,8 @@ export const serviceContent = [
         "Yes. Select “Not sure” on the estimate form and tell us your priorities. The team will help you choose a suitable option.",
       ],
     ],
+    teaser: "Professional window film, carefully installed.",
+    updated: "2026-11-06",
   },
   {
     id: "dash-cams",
@@ -343,9 +382,9 @@ export const serviceContent = [
     tag: "A clearer view of your drive",
     headline: "Capture the road.\nKeep the installation tidy.",
     description:
-      "Dash cam installation at Action Audio in Wethersfield. Explore front, rear, and cabin camera setups suited to your vehicle.",
-    image: "service-dash-cam.webp",
-    alt: "Illustration of a windshield-mounted dash camera",
+      "Explore modern dash cams from brands such as THINKWARE and BlackVue. Discuss front and rear recording, phone access, and parking-mode options for your vehicle.",
+    image: "service-dash-scene.webp",
+    alt: "Illustration of a windshield-mounted dash camera recording the road ahead",
     booking: "dash-cams",
     category: "Dash cams",
     items: [
@@ -354,7 +393,7 @@ export const serviceContent = [
       "Parking-mode and equipment compatibility",
     ],
     detail:
-      "Tell us which views you want to record, whether you own a camera, and whether you want recording while parked. We’ll review power requirements, camera placement, and vehicle compatibility.",
+      "Current examples include the THINKWARE U3000 PRO and BlackVue ELITE 9-2CH. Tell us which views you want to record and whether you need phone access or recording while parked. We’ll confirm camera availability, vehicle fit, wiring, and any connected-service requirements before installation.",
     prepare:
       "Have your vehicle details and any camera model numbers ready. Mention parking-mode recording if you want it.",
     faq: [
@@ -363,6 +402,26 @@ export const serviceContent = [
         "Share the camera make, model, and included wiring kit. The team will review compatibility and confirm the installation scope.",
       ],
     ],
+    teaser: "Modern cameras. Clearer footage. Connected features.",
+    examples: [
+      {
+        image: "service-thinkware.webp",
+        alt: "THINKWARE U3000 PRO dash camera with its windshield mount and front lens",
+        name: "THINKWARE U3000 PRO",
+        description:
+          "A modern connected dash-camera example to discuss with our team.",
+        url: "https://thinkwarestore.com/product/u3000-pro/",
+      },
+      {
+        image: "service-blackvue.webp",
+        alt: "BlackVue ELITE 9 front and rear dash cameras",
+        name: "BlackVue ELITE 9-2CH",
+        description:
+          "A front and rear camera example to discuss with our team.",
+        url: "https://blackvue.com/products/elite-9-2ch",
+      },
+    ],
+    updated: "2026-11-06",
   },
   {
     id: "gps-trackers",
@@ -370,18 +429,18 @@ export const serviceContent = [
     tag: "Stay connected to your vehicle",
     headline: "Know your vehicle.\nWherever the day goes.",
     description:
-      "GPS tracker installation at our Wethersfield store. Discuss a setup for your vehicle, the features you need, and compatible equipment.",
-    image: "service-gps.webp",
-    alt: "Illustration of a GPS location marker and a vehicle route",
+      "Keep your vehicle in view from your phone. Explore DroneMobile GPS tracking with location maps, geofence options, and trip information on supported plans.",
+    image: "service-gps-scene.webp",
+    alt: "Illustration of a vehicle location and route on a phone beside an SUV",
     booking: "gps-trackers",
     category: "GPS trackers",
     items: [
-      "Vehicle and tracker compatibility",
-      "Power and mounting requirements",
-      "Connected-service and subscription options",
+      "Phone-based vehicle location and mapping",
+      "Geofence and trip-history options by plan",
+      "DroneMobile hardware, LTE coverage, and subscription review",
     ],
     detail:
-      "Let us know whether you already own a tracker, how many vehicles need equipment, and the features you’re looking for. We’ll discuss installation and any required connected service before you choose a setup.",
+      "The DroneMobile X2 connects a compatible vehicle setup to the phone app over LTE. Open the app to view location information; supported plans add features such as geofences and trip history. Ask our team to confirm hardware, coverage, plan requirements, and installation for your vehicle.",
     prepare:
       "Share the vehicle details, tracker model if you have one, and whether the request covers one vehicle or a fleet.",
     faq: [
@@ -390,6 +449,18 @@ export const serviceContent = [
         "Some trackers require a connected service. The team will discuss equipment requirements and any recurring fees for the option you choose.",
       ],
     ],
+    teaser: "See your vehicle on your phone with DroneMobile.",
+    examples: [
+      {
+        image: "service-dronemobile-gps.webp",
+        alt: "DroneMobile phone screens showing vehicle location, geofence settings, trip details, and trip history",
+        name: "DroneMobile GPS app",
+        description:
+          "Equipment example to discuss with our team. Compatibility and connected features depend on the selected system.",
+        url: "https://www.dronemobile.com/products/x2-lte",
+      },
+    ],
+    updated: "2026-11-06",
   },
 ];
 export const electronicsCategories = [
@@ -398,8 +469,7 @@ export const electronicsCategories = [
   "Security",
   "Motorcycle audio",
   "Video systems",
-  "Power liftgates",
-  "Accessories",
+  "Motorsport upgrades",
   "Dash cams",
   "GPS trackers",
 ];

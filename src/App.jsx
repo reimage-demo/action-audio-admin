@@ -1162,10 +1162,9 @@ function ProductDialog({ product: p, onClose, onSave }) {
                 "Receivers",
                 "Remote starters",
                 "Security",
-                "Accessories",
+                "Motorsport upgrades",
                 "Motorcycle audio",
                 "Video systems",
-                "Power liftgates",
                 "Radar detectors",
               ].map((c) => (
                 <option key={c}>{c}</option>

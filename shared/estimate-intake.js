@@ -98,15 +98,11 @@ export const estimateQuestions = {
     ]),
     equipment,
   ],
-  "power-liftgates": [
-    question("liftgate", "What type of liftgate do you have now?", [
-      "Manual liftgate",
-      "Powered liftgate",
-    ]),
+  "motorsport-upgrades": audio,
+  "electrical-installation": [
+    question("connectivity", "Which phone connection would you like?", ["Apple CarPlay", "Android Auto", "Both"]),
     equipment,
   ],
-  "vehicle-accessories": [equipment],
-  "electrical-installation": [equipment],
 };
 export const detailPrompts = {
   "auto-detailing":

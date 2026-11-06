@@ -108,6 +108,8 @@ describe("encrypted service estimates", () => {
       { vehicleMake: "" },
       { vehicleModel: "" },
       { service: "not-a-service" },
+      { service: "power-liftgates" },
+      { service: "vehicle-accessories" },
     ])
       await expect(
         t.mutation(api.estimates.create, request(extra)),
@@ -145,6 +147,8 @@ describe("service-specific estimate intake", () => {
     ["dash-cams", "wethersfield"],
     ["gps-trackers", "wethersfield"],
     ["electronics-replacement", "wethersfield"],
+    ["motorsport-upgrades", "wethersfield"],
+    ["electrical-installation", "wethersfield"],
   ])(
     "routes %s and preserves encrypted intake for staff",
     async (service, store) => {

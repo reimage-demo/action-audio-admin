@@ -37,10 +37,12 @@ export const save = mutation({
         "Receivers",
         "Remote starters",
         "Security",
+        "Motorsport upgrades",
+        // Retain legacy categories so existing inventory can still be edited.
         "Accessories",
+        "Power liftgates",
         "Motorcycle audio",
         "Video systems",
-        "Power liftgates",
         "Radar detectors",
       ].includes(data.category) ||
       (data.price !== undefined &&
