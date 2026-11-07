@@ -10,6 +10,8 @@
 
 import type * as appointments from "../appointments.js";
 import type * as auth from "../auth.js";
+import type * as crons from "../crons.js";
+import type * as emails from "../emails.js";
 import type * as estimates from "../estimates.js";
 import type * as http from "../http.js";
 import type * as inventory from "../inventory.js";
@@ -29,6 +31,8 @@ import type {
 declare const fullApi: ApiFromModules<{
   appointments: typeof appointments;
   auth: typeof auth;
+  crons: typeof crons;
+  emails: typeof emails;
   estimates: typeof estimates;
   http: typeof http;
   inventory: typeof inventory;

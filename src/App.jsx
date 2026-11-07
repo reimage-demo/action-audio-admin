@@ -188,10 +188,12 @@ export default function App() {
 function Connected() {
   const appointments = useQuery(api.appointments.list),
     inventory = useQuery(api.inventory.list),
-    estimates = useQuery(api.estimates.list);
+    estimates = useQuery(api.estimates.list),
+    emailUsage = useQuery(api.emails.usage);
   const updateStatus = useMutation(api.appointments.updateStatus),
     saveProduct = useMutation(api.inventory.save),
-    updateEstimate = useMutation(api.estimates.update);
+    updateEstimate = useMutation(api.estimates.update),
+    sendEstimateEmail = useMutation(api.emails.sendEstimate);
   const { signOut } = useAuthActions();
   if (!appointments || !inventory || !estimates)
     return <div className="auth-shell">Loading your workspace…</div>;
@@ -201,6 +203,8 @@ function Connected() {
       liveInventory={inventory}
       liveEstimates={estimates}
       updateEstimate={updateEstimate}
+      sendEstimateEmail={sendEstimateEmail}
+      emailUsage={emailUsage}
       updateStatus={updateStatus}
       saveProduct={saveProduct}
       signOut={signOut}
@@ -213,6 +217,8 @@ export function Portal({
   liveInventory,
   liveEstimates = [],
   updateEstimate,
+  sendEstimateEmail,
+  emailUsage,
   updateStatus,
   saveProduct,
   signOut,
@@ -233,6 +239,7 @@ export function Portal({
         _id: "demo-estimate",
         name: "Casey Parker",
         phone: "8605550102",
+        email: "casey@example.com",
         vehicleMake: "Toyota",
         vehicleModel: "RAV4",
         vehicleYear: "2022",
@@ -529,7 +536,7 @@ export function Portal({
                     dashboard:
                       "Appointments and service activity across both stores.",
                     estimates:
-                      "Review vehicle details, call the customer, and record an approximate quote.",
+                      "Review vehicle details and email a branded estimate to the customer.",
                     appointments:
                       "Review appointment requests and confirm customer visits.",
                     vehicles:
@@ -747,6 +754,9 @@ export function Portal({
             <Estimates
               items={estimates}
               onSave={onEstimate}
+              onSend={sendEstimateEmail}
+              usage={emailUsage}
+              demo={demo}
               store={store}
               Modal={Modal}
             />

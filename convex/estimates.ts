@@ -6,6 +6,8 @@ import { serviceStore } from "../shared/catalog.js";
 import { blindIndex, encrypt, decrypt } from "./lib/encryption";
 import { requireAdmin } from "./lib/requireAdmin";
 import { enqueueNotification } from "./notifications";
+import { enqueueEmail } from "./emails";
+import { validEmail } from "../shared/estimate-email.js";
 import type { Doc } from "./_generated/dataModel";
 const estimateStatus = v.union(
   v.literal("new"),
@@ -13,9 +15,10 @@ const estimateStatus = v.union(
   v.literal("quoted"),
   v.literal("closed"),
 );
-type Estimate = {
+export type Estimate = {
   name: string;
   phone: string;
+  email?: string;
   vehicleYear?: string;
   vehicleTrim?: string;
   details?: string;
@@ -34,12 +37,13 @@ type Estimate = {
 };
 const context = (r: { requestHash: string; phoneHash: string }) =>
   JSON.stringify(["estimate", r.requestHash, r.phoneHash]);
-const read = (r: Doc<"estimates">) =>
+export const readEstimate = (r: Doc<"estimates">) =>
   decrypt<Estimate>(r.encrypted, context(r));
 export const create = mutation({
   args: {
     name: v.string(),
     phone: v.string(),
+    email: v.optional(v.string()),
     vehicleYear: v.optional(v.string()),
     vehicleTrim: v.optional(v.string()),
     details: v.optional(v.string()),
@@ -60,6 +64,9 @@ export const create = mutation({
       phone = args.phone.trim(),
       vehicleMake = args.vehicleMake.trim(),
       vehicleModel = args.vehicleModel.trim();
+    const email = args.email?.trim().toLowerCase() || "";
+    if (args.email !== undefined && !validEmail(email))
+      throw new ConvexError("Check your email address.");
     const selected = serviceContent.find((s) => s.id === args.service);
     if (
       name.length < 2 ||
@@ -128,10 +135,11 @@ export const create = mutation({
       .withIndex("by_request", (q) => q.eq("requestHash", requestHash))
       .unique();
     if (previous) {
-      const prior = await read(previous);
+      const prior = await readEstimate(previous);
       if (
         prior.name !== name ||
         prior.phone !== phone ||
+        (prior.email || "") !== email ||
         prior.vehicleMake !== vehicleMake ||
         prior.vehicleModel !== vehicleModel ||
         prior.service !== args.service ||
@@ -163,6 +171,7 @@ export const create = mutation({
     const estimate: Estimate = {
       name,
       phone,
+      email,
       vehicleMake,
       vehicleModel,
       vehicleYear,
@@ -185,6 +194,14 @@ export const create = mutation({
       encrypted: await encrypt(estimate, context(indexes)),
     });
     await enqueueNotification(ctx, "estimate", estimateId);
+    if (email)
+      await enqueueEmail(ctx, estimateId, "thanks", `thanks:${estimateId}`, {
+        email,
+        name,
+        service: args.service,
+        store,
+        body: "",
+      });
     return { received: true };
   },
 });
@@ -194,7 +211,7 @@ export const list = query({
     await requireAdmin(ctx);
     const rows = await ctx.db.query("estimates").order("desc").collect();
     return Promise.all(
-      rows.map(async (r) => ({ ...(await read(r)), _id: r._id })),
+      rows.map(async (r) => ({ ...(await readEstimate(r)), _id: r._id })),
     );
   },
 });
@@ -210,7 +227,7 @@ export const update = mutation({
       throw new ConvexError("Keep notes under 2,000 characters.");
     const row = await ctx.db.get(args.id);
     if (!row) throw new ConvexError("Estimate request not found.");
-    const data = await read(row);
+    const data = await readEstimate(row);
     await ctx.db.patch(row._id, {
       encrypted: await encrypt(
         {

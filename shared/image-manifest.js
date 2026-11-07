@@ -163,6 +163,27 @@ export const imageManifest = {
       }
     ]
   },
+  "hero-phone-start-cutout.webp": {
+    "width": 1127,
+    "height": 1396,
+    "variants": [
+      {
+        "width": 480,
+        "avif": "/assets/optimized/hero-phone-start-cutout-480-hq.avif",
+        "webp": "/assets/optimized/hero-phone-start-cutout-480-hq.webp"
+      },
+      {
+        "width": 800,
+        "avif": "/assets/optimized/hero-phone-start-cutout-800-hq.avif",
+        "webp": "/assets/optimized/hero-phone-start-cutout-800-hq.webp"
+      },
+      {
+        "width": 1127,
+        "avif": "/assets/optimized/hero-phone-start-cutout-1127-hq.avif",
+        "webp": "/assets/optimized/hero-phone-start-cutout-1127-hq.webp"
+      }
+    ]
+  },
   "hero-remote-start.webp": {
     "width": 1672,
     "height": 941,
