@@ -11,13 +11,13 @@ Set these in the production Convex environment, never a frontend `VITE_*` variab
 - `BREVO_API_KEY`: restricted Brevo API key with Transactional email All and Account Read permissions.
 - `BREVO_SENDER_EMAIL`: `actionaudiostore@gmail.com` (verified in Brevo on November 7, 2026).
 - `BREVO_REPLY_TO_EMAIL`: `actionaudiostore@gmail.com`.
-- `BREVO_ENABLED`: `true` only after the key and sender have been checked.
+- `BREVO_ENABLED`: `true` in production after key and sender validation.
 
 The sender display name is Action Audio. The existing Gmail sender is verified; Brevo recommends an authenticated business-domain sender for deliverability. No new sender or DNS records have been created.
 
-Leave development disabled. Keep the key server-side. Brevo’s prepared key expires November 7, 2027, or after 90 days of inactivity; arrange replacement before expiry. Key creation was approved on November 7, 2026. Brevo requires a six-digit email verification code before generation; that verification is pending.
+Leave development disabled. Keep the key server-side. Brevo’s prepared key expires November 7, 2027, or after 90 days of inactivity; arrange replacement before expiry. Key creation and verification were completed on November 7, 2026. The restricted key is active and configured only in production Convex secrets.
 
-Convex was deployed to production on November 7, 2026 with delivery disabled and sender/reply-to configured. Publish both frontends only after key verification. Enable delivery after configuration. Pending messages resume automatically. No historical customer emails are backfilled.
+Convex was deployed to production on November 7, 2026. The verified sender/reply-to and restricted key are configured, and delivery is enabled. Both frontends include the email intake and composer. Pending messages resume automatically. No historical customer emails are backfilled.
 
 ## Sending limits and recovery
 
@@ -31,6 +31,6 @@ Email recipient and content snapshots use the existing authenticated encryption 
 
 ## Validation
 
-Automated tests cover encrypted storage, authorization, input validation, deduplication, atomic capacity reservation, next-day resumption, provider credit buffer, successful acceptance, ambiguous failures, and HTML escaping. A local Safari preview verifies intake email copy and the branded composer. Live delivery still requires the configured key and an authorized test recipient.
+Automated tests cover encrypted storage, authorization, input validation, deduplication, atomic capacity reservation, next-day resumption, provider credit buffer, successful acceptance, ambiguous failures, and HTML escaping. A local Safari preview verifies intake email copy and the branded composer. Both branded templates passed Brevo sandbox API validation (HTTP 201) on November 7, 2026. The production account reports transactional sending enabled and a verified sender. Inbox delivery has not been tested; sandbox validation does not deliver a message.
 
 Provider references: https://developers.brevo.com/reference/send-transac-email and https://developers.brevo.com/reference/get-account.
