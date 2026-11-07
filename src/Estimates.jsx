@@ -219,19 +219,21 @@ function EstimateDialog({ request: a, onSave, onSend, demo, onClose, Modal }) {
           )}
         </dl>
       </section>
-      <a
-        className="call-customer"
-        href={"tel:" + a.phone.replace(/[^+\d]/g, "")}
-      >
-        Call customer
-      </a>
-      <button
-        type="button"
-        className="send-estimate-button"
-        onClick={() => setComposing(true)}
-      >
-        Send email
-      </button>
+      <div className="estimate-contact-actions">
+        <a
+          className="call-customer"
+          href={"tel:" + a.phone.replace(/[^+\d]/g, "")}
+        >
+          Call customer
+        </a>
+        <button
+          type="button"
+          className="send-estimate-button"
+          onClick={() => setComposing(true)}
+        >
+          Send email
+        </button>
+      </div>
       {!demo && <EmailHistory id={a._id} />}
       <form
         onSubmit={async (e) => {

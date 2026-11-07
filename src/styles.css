@@ -1356,7 +1356,41 @@ th{background:#edf3fa;color:#12345b}
 .modal .close:hover{background:#dce7f3}
 @media(max-width:600px){.stat-grid{gap:12px}.stat-card{padding:18px}}
 
-.send-estimate-button { margin: 16px 0; }
+.estimate-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  margin: 24px 0;
+}
+.estimate-contact-actions > .call-customer,
+.estimate-contact-actions > .send-estimate-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 12px 20px;
+  border: 1px solid var(--brand-red);
+  border-radius: 4px;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.25;
+  text-decoration: none;
+}
+.estimate-contact-actions > .call-customer {
+  background: #fff;
+  color: var(--brand-red);
+}
+.estimate-contact-actions > .call-customer:hover {
+  background: #fff0f1;
+  color: var(--brand-red-hover);
+}
+@media (max-width: 480px) {
+  .estimate-contact-actions { flex-direction: column; }
+  .estimate-contact-actions > .call-customer,
+  .estimate-contact-actions > .send-estimate-button { width: 100%; }
+}
 .email-history { border-top: 1px solid #dce3ec; padding: 18px 0; margin-top: 16px; }
 .email-history details { padding: 12px 0; border-bottom: 1px solid #dce3ec; }
 .email-history summary, .email-preview summary { cursor: pointer; font-weight: 600; line-height: 1.5; }
