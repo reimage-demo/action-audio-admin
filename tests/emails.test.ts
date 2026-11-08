@@ -172,9 +172,12 @@ describe("estimate email outbox", () => {
     expect(sent?.messageId).toBe("brevo-id");
     const payload = JSON.parse(fetcher.mock.calls[1][1].body);
     expect(payload.to[0].email).toBe("customer@example.com");
-    expect(payload.htmlContent).toContain("ACTION");
+    expect(payload.htmlContent).toContain('alt="The Action Audio Store"');
+    expect(payload.htmlContent).toContain("105 Silas Deane Hwy");
+    expect(payload.htmlContent).toContain("2814 Main St");
+    expect(payload.htmlContent).toContain('href="tel:8606676330"');
     expect(payload.textContent).toContain(
-      "send your estimate to this email address",
+      "email your estimate as soon as possible",
     );
     expect(payload.headers.idempotencyKey).toBe(delivery._id);
   });
