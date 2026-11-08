@@ -1485,3 +1485,9 @@ a.text-button:hover { background: #edf3fa; color: #12345b; }
   .workspace-header > div > span:first-of-type,
   .workspace-header .header-divider { display: none; }
 }
+
+.estimate-row-actions,
+.estimate-delete-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.estimate-delete-actions { margin-top: 24px; justify-content: flex-end; }
+button.text-button.delete-estimate-button { color: #b51d32; border-color: #e5b3bb; }
+button.text-button.delete-estimate-button:hover { color: #98192b; background: #fff0f1; }

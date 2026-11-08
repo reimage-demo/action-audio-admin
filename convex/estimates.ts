@@ -241,3 +241,30 @@ export const update = mutation({
     });
   },
 });
+
+export const remove = mutation({
+  args: { id: v.id("estimates") },
+  handler: async (ctx, { id }) => {
+    await requireAdmin(ctx);
+    const row = await ctx.db.get(id);
+    if (!row) return;
+    const emails = await ctx.db
+      .query("emailDeliveries")
+      .withIndex("by_estimate", (q) => q.eq("estimateId", id))
+      .collect();
+    // Do not report cancellation after a worker has claimed an external send.
+    if (emails.some((email) => email.status === "sending"))
+      throw new ConvexError(
+        "An email is currently sending for this estimate. Wait for it to finish, then delete again.",
+      );
+    const notifications = await ctx.db
+      .query("notificationDeliveries")
+      .withIndex("by_record", (q) => q.eq("recordId", id))
+      .collect();
+    for (const email of emails) await ctx.db.delete(email._id);
+    for (const notification of notifications)
+      await ctx.db.delete(notification._id);
+    // Keep the anonymous emailAttempts entries so deletion cannot reset limits.
+    await ctx.db.delete(id);
+  },
+});

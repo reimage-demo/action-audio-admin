@@ -193,6 +193,7 @@ function Connected() {
   const updateStatus = useMutation(api.appointments.updateStatus),
     saveProduct = useMutation(api.inventory.save),
     updateEstimate = useMutation(api.estimates.update),
+    deleteEstimate = useMutation(api.estimates.remove),
     sendEstimateEmail = useMutation(api.emails.sendEstimate);
   const { signOut } = useAuthActions();
   if (!appointments || !inventory || !estimates)
@@ -203,6 +204,7 @@ function Connected() {
       liveInventory={inventory}
       liveEstimates={estimates}
       updateEstimate={updateEstimate}
+      deleteEstimate={deleteEstimate}
       sendEstimateEmail={sendEstimateEmail}
       emailUsage={emailUsage}
       updateStatus={updateStatus}
@@ -217,6 +219,7 @@ export function Portal({
   liveInventory,
   liveEstimates = [],
   updateEstimate,
+  deleteEstimate,
   sendEstimateEmail,
   emailUsage,
   updateStatus,
@@ -376,6 +379,12 @@ export function Portal({
         ? "Preview estimate updated. No customer was contacted."
         : "Estimate request updated.",
     );
+  }
+  async function onDeleteEstimate(args) {
+    if (demo)
+      setPreviewEstimates((prev) => prev.filter((a) => a._id !== args.id));
+    else await deleteEstimate(args);
+    setMessage(demo ? "Preview estimate deleted." : "Estimate deleted.");
   }
   async function onStatus(args) {
     if (demo)
@@ -806,6 +815,7 @@ export function Portal({
             <Estimates
               items={estimates}
               onSave={onEstimate}
+              onDelete={onDeleteEstimate}
               onSend={sendEstimateEmail}
               usage={emailUsage}
               demo={demo}

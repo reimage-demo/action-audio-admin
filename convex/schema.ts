@@ -40,7 +40,9 @@ export default defineSchema({
     errorCode: v.optional(v.string()),
     pushoverRequest: v.optional(v.string()),
     sentAt: v.optional(v.number()),
-  }).index("by_status", ["status"]),
+  })
+    .index("by_status", ["status"])
+    .index("by_record", ["recordId"]),
   appointments: defineTable({
     encrypted: encryptedValue,
     emailHash: v.string(),

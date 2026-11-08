@@ -21,6 +21,7 @@ const received = (at) =>
 export default function Estimates({
   items,
   onSave,
+  onDelete,
   onSend,
   usage,
   demo,
@@ -29,7 +30,8 @@ export default function Estimates({
 }) {
   const [search, setSearch] = useState(""),
     [status, setStatus] = useState(""),
-    [selected, setSelected] = useState(null);
+    [selected, setSelected] = useState(null),
+    [deleting, setDeleting] = useState(null);
   const shown = items.filter(
     (a) =>
       (!store || a.store === store) &&
@@ -39,6 +41,7 @@ export default function Estimates({
         .includes(search.toLowerCase()),
   );
   const active = items.find((a) => a._id === selected);
+  const deleteTarget = items.find((a) => a._id === deleting);
   return (
     <>
       <p className="notice">
@@ -109,12 +112,22 @@ export default function Estimates({
                   </span>
                 </td>
                 <td>
-                  <button
-                    className="text-button"
-                    onClick={() => setSelected(a._id)}
-                  >
-                    View request
-                  </button>
+                  <div className="estimate-row-actions">
+                    <button
+                      className="text-button"
+                      onClick={() => setSelected(a._id)}
+                    >
+                      View request
+                    </button>
+                    <button
+                      type="button"
+                      className="text-button delete-estimate-button"
+                      aria-label={`Delete estimate for ${a.name}`}
+                      onClick={() => setDeleting(a._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -130,21 +143,108 @@ export default function Estimates({
           </div>
         )}
       </section>
-      {active && (
+      {active && !deleteTarget && (
         <EstimateDialog
           key={active._id}
           request={active}
           onSave={onSave}
           onSend={onSend}
+          onDelete={() => setDeleting(active._id)}
           demo={demo}
           onClose={() => setSelected(null)}
           Modal={Modal}
         />
       )}
+      {deleteTarget && (
+        <DeleteEstimateDialog
+          request={deleteTarget}
+          onDelete={onDelete}
+          Modal={Modal}
+          onClose={() => setDeleting(null)}
+          onDeleted={() => {
+            setDeleting(null);
+            setSelected(null);
+          }}
+        />
+      )}
     </>
   );
 }
-function EstimateDialog({ request: a, onSave, onSend, demo, onClose, Modal }) {
+function DeleteEstimateDialog({
+  request,
+  onDelete,
+  onClose,
+  onDeleted,
+  Modal,
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  return (
+    <Modal
+      title="Delete estimate?"
+      onClose={() => {
+        if (!busy) onClose();
+      }}
+    >
+      <p>
+        Permanently delete the estimate for <strong>{request.name}</strong> (
+        {request.vehicleYear} {request.vehicleMake} {request.vehicleModel})?
+      </p>
+      <p>
+        This removes the request, internal notes, and email history from the
+        portal and cancels queued emails. Emails already sent cannot be
+        recalled. This cannot be undone.
+      </p>
+      {error && (
+        <p className="notice" role="alert">
+          {error}
+        </p>
+      )}
+      <div className="estimate-delete-actions">
+        <button
+          type="button"
+          className="text-button"
+          disabled={busy}
+          onClick={onClose}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="delete-estimate-button"
+          disabled={busy}
+          onClick={async () => {
+            if (busy) return;
+            setBusy(true);
+            setError("");
+            try {
+              await onDelete({ id: request._id });
+              onDeleted();
+            } catch (err) {
+              setError(
+                err.data ||
+                  err.message ||
+                  "Unable to delete estimate. Please try again.",
+              );
+              setBusy(false);
+            }
+          }}
+        >
+          {busy ? "Deleting…" : "Delete estimate"}
+        </button>
+      </div>
+    </Modal>
+  );
+}
+function EstimateDialog({
+  request: a,
+  onSave,
+  onSend,
+  onDelete,
+  demo,
+  onClose,
+  Modal,
+}) {
   const [status, setStatus] = useState(a.status),
     [staffNotes, setStaffNotes] = useState(a.staffNotes),
     [busy, setBusy] = useState(false),
@@ -280,6 +380,14 @@ function EstimateDialog({ request: a, onSave, onSend, demo, onClose, Modal }) {
         )}
         <button disabled={busy}>
           {busy ? "Saving…" : "Save estimate update"}
+        </button>
+        <button
+          type="button"
+          className="text-button delete-estimate-button"
+          disabled={busy}
+          onClick={onDelete}
+        >
+          Delete estimate
         </button>
       </form>
     </Modal>

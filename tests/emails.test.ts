@@ -51,6 +51,81 @@ async function setup() {
   return { t, admin, estimate, delivery };
 }
 describe("estimate email outbox", () => {
+  it("allows only the manager to delete an estimate and removes its queued records without resetting send limits", async () => {
+    const { t, admin, estimate, delivery } = await setup();
+    await t.mutation(api.estimates.create, request({ phone: "8605550199" }));
+    const other = (await admin.query(api.estimates.list, {})).find(
+      (a) => a._id !== estimate._id,
+    )!;
+    const notificationId = await t.run(async (ctx) => {
+      await ctx.db.insert("emailAttempts", { at: Date.now() });
+      return ctx.db.insert("notificationDeliveries", {
+        kind: "estimate",
+        recordId: estimate._id,
+        status: "pending",
+        attempts: 0,
+      });
+    });
+    await expect(
+      t.mutation(api.estimates.remove, { id: estimate._id }),
+    ).rejects.toThrow("Staff access");
+    const outsider = await t.run((ctx) =>
+      ctx.db.insert("users", { name: "Not the manager" }),
+    );
+    await expect(
+      t
+        .withIdentity({ subject: outsider + "|session" })
+        .mutation(api.estimates.remove, { id: estimate._id }),
+    ).rejects.toThrow("Staff access");
+    expect(await admin.query(api.estimates.list, {})).toHaveLength(2);
+
+    await admin.mutation(api.estimates.remove, { id: estimate._id });
+    await admin.mutation(api.estimates.remove, { id: estimate._id });
+    expect(
+      (await admin.query(api.estimates.list, {})).map((a) => a._id),
+    ).toEqual([other._id]);
+    expect(await admin.query(api.emails.history, { id: estimate._id })).toEqual(
+      [],
+    );
+    expect(
+      await admin.query(api.emails.history, { id: other._id }),
+    ).toHaveLength(1);
+    expect((await admin.query(api.emails.usage, {})).used).toBe(1);
+    expect(
+      await t.mutation(internal.emails.claim, { id: delivery._id }),
+    ).toBeNull();
+    expect(
+      await t.query(internal.notifications.getDelivery, { id: notificationId }),
+    ).toBeNull();
+    await expect(
+      admin.mutation(api.emails.sendEstimate, {
+        id: estimate._id,
+        email: "customer@example.com",
+        body: "This must never be sent.",
+        requestKey: crypto.randomUUID(),
+      }),
+    ).rejects.toThrow("not found");
+  });
+  it("keeps the estimate intact while an email is being sent and permits deletion once finished", async () => {
+    const { t, admin, estimate, delivery } = await setup();
+    await t.run((ctx) => ctx.db.patch(delivery._id, { status: "sending" }));
+    await expect(
+      admin.mutation(api.estimates.remove, { id: estimate._id }),
+    ).rejects.toThrow("currently sending");
+    expect(await admin.query(api.estimates.list, {})).toHaveLength(1);
+    expect(
+      await admin.query(api.emails.history, { id: estimate._id }),
+    ).toHaveLength(1);
+    await t.mutation(internal.emails.recordResult, {
+      id: delivery._id,
+      status: "sent",
+    });
+    await admin.mutation(api.estimates.remove, { id: estimate._id });
+    expect(await admin.query(api.estimates.list, {})).toEqual([]);
+    expect(await admin.query(api.emails.history, { id: estimate._id })).toEqual(
+      [],
+    );
+  });
   it("validates email, encrypts recipient and content, and queues exactly one thank-you per request", async () => {
     const { t, admin } = await setup();
     const args = request({ phone: "8605550199" });
