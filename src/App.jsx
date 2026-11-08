@@ -1,5 +1,5 @@
 import { publicPage, logoUrl } from "./site";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -261,6 +261,43 @@ export function Portal({
       },
     ]),
     [calendarDate, setCalendarDate] = useState(today());
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem("action-audio.sidebar-collapsed") === "true";
+    } catch {
+      return false;
+    }
+  });
+  const [isMobile, setIsMobile] = useState(() =>
+    window.matchMedia("(max-width: 850px)").matches,
+  );
+  const navigationToggle = useRef(null);
+  const navigationClose = useRef(null);
+  const sidebarVisible = isMobile ? menu : !sidebarCollapsed;
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 850px)");
+    const onChange = () => {
+      setIsMobile(media.matches);
+      setMenu(false);
+    };
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem("action-audio.sidebar-collapsed", String(sidebarCollapsed));
+    } catch {
+      // Navigation still works when browser storage is unavailable.
+    }
+  }, [sidebarCollapsed]);
+  useEffect(() => {
+    if (isMobile && menu) navigationClose.current?.focus();
+  }, [isMobile, menu]);
+  function closeNavigation() {
+    if (isMobile) setMenu(false);
+    else setSidebarCollapsed(true);
+    navigationToggle.current?.focus();
+  }
   const appointments = demo ? previewAppointments : liveAppointments,
     inventory = demo ? previewInventory : liveInventory,
     estimates = demo ? previewEstimates : liveEstimates;
@@ -317,6 +354,7 @@ export function Portal({
     setSearch("");
     setStatus("");
     setMenu(false);
+    if (isMobile) navigationToggle.current?.focus();
   }
   async function onEstimate(args) {
     if (demo)
@@ -438,14 +476,22 @@ export function Portal({
     </div>
   );
   return (
-    <div className="app-shell">
-      <aside className={"sidebar " + (menu ? "open" : "")}>
+    <div className={"app-shell" + (sidebarCollapsed ? " sidebar-collapsed" : "")}>
+      <aside
+        id="admin-sidebar"
+        className={"sidebar " + (menu ? "open" : "")}
+        inert={!sidebarVisible}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") closeNavigation();
+        }}
+      >
         <button
           className="sidebar-close"
-          onClick={() => setMenu(false)}
-          aria-label="Close navigation"
+          ref={navigationClose}
+          onClick={closeNavigation}
+          aria-label={isMobile ? "Close navigation" : "Collapse sidebar"}
         >
-          Close
+          {isMobile ? "Close" : "Collapse"}
         </button>
         <a href={publicPage()} className="sidebar-brand">
           <Logo />
@@ -499,12 +545,18 @@ export function Portal({
         <header className="workspace-header">
           <div>
             <button
-              className="mobile-menu"
-              onClick={() => setMenu(!menu)}
-              aria-label="Toggle navigation"
-              aria-expanded={menu}
+              className="navigation-toggle"
+              ref={navigationToggle}
+              onClick={() => isMobile ? setMenu(!menu) : setSidebarCollapsed(!sidebarCollapsed)}
+              aria-label={sidebarVisible ? "Collapse sidebar" : "Expand sidebar"}
+              aria-expanded={sidebarVisible}
+              aria-controls="admin-sidebar"
             >
-              ☰
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="16" rx="3" />
+                <path d="M9 4v16" />
+                <path d={sidebarVisible ? "m16 9-3 3 3 3" : "m13 9 3 3-3 3"} />
+              </svg>
             </button>
             <span>Workspace</span>
             <span className="header-divider">/</span>
