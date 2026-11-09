@@ -82,11 +82,20 @@ textarea {
   border-radius: 4px;
   background: #fff;
   color: #263650;
+  font-weight: 400;
   padding: 11px 13px;
   min-height: 44px;
 }
 textarea {
   resize: vertical;
+}
+/* Keep Safari selects the same size as the other form controls. */
+select {
+  appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23263650' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
 }
 a {
   color: inherit;
@@ -125,9 +134,11 @@ small {
 label {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
+  min-width: 0;
+  color: #a61b2b;
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 600;
 }
 a:hover {
   color: var(--blue);
@@ -700,7 +711,7 @@ td small {
   overflow-wrap: anywhere;
 }
 .modal form > label {
-  margin-top: 17px;
+  margin-top: 24px;
 }
 .modal form > small {
   display: block;
@@ -739,7 +750,7 @@ td small {
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 24px 18px;
 }
 .full {
   grid-column: 1/-1;
@@ -1504,4 +1515,27 @@ button.text-button.delete-estimate-button:hover { color: #98192b; background: #f
 .modal:has(.promotion-steps),.modal:has(.promotion-done){width:min(1000px,calc(100vw - 32px));max-width:1000px}.promotion-steps{display:flex;gap:10px;margin-bottom:24px}.promotion-steps span{background:#edf2f7;border-radius:999px;padding:10px 16px;font-size:13px;color:#5e6b78}.promotion-steps span.active{background:#12345b;color:white}.promotion-template-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}.promotion-template-picker button{border:1px solid #dce3ec;background:#f8fafc;color:#12345b;padding:16px;text-align:left;border-radius:12px!important}.promotion-template-picker button.selected{border-color:#c92336;background:#fff1f3;box-shadow:inset 0 0 0 1px #c92336}.promotion-template-picker small{display:block;font-weight:400;font-size:12px;margin-top:8px;line-height:1.5}.promotion-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.promotion-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:24px;border-top:1px solid #dce3ec;padding-top:20px}.promotion-footer>span{margin-right:auto;font-size:13px;color:#5e6b78}.promotion-test{margin-top:20px;padding:18px;background:#edf2f7;border-radius:12px}.promotion-test input{max-width:420px}.promotion-test p{font-size:13px}.promotion-review>p{line-height:1.7}.promotion-review li{padding:8px 0;overflow-wrap:anywhere}.promotion-review details{padding:18px;border:1px solid #dce3ec;border-radius:10px}.promotion-review .customer-summary{grid-template-columns:repeat(3,1fr)}.promotion-frame{width:100%;height:550px;border:1px solid #dce3ec}.customer-request-history{border-top:1px solid #dce3ec;margin-top:24px;padding-top:20px}.customer-request-history p{padding:12px 0;border-bottom:1px solid #edf2f7;font-size:14px;line-height:1.7}.customer-checkbox{display:flex!important;align-items:flex-start;gap:10px;font-size:13px}
 @media(max-width:1100px){.customer-intro,.customer-selection,.customer-section-heading{align-items:flex-start;flex-direction:column}.promotion-teasers{grid-template-columns:repeat(2,1fr)}.customer-filters{flex-wrap:wrap}.customer-filters input{flex-basis:100%}}
 @media(max-width:600px){.customer-summary{grid-template-columns:repeat(2,1fr);gap:8px}.customer-summary>div{padding:14px}.customer-summary strong{font-size:24px}.promotion-teasers,.promotion-editor-grid{grid-template-columns:1fr}.promotion-template-picker{grid-template-columns:1fr 1fr}.promotion-steps{flex-direction:column}.promotion-review .customer-summary{grid-template-columns:1fr}.customer-selection>div{width:100%}.customer-selection button{flex:1 1 auto}.promotion-footer button{width:100%}.customer-intro h2{font-size:25px}}
-.promotion-fields{border:0;padding:0;margin:0;min-width:0}
+.promotion-fields {
+  display: grid;
+  gap: 24px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.promotion-editor-grid {
+  row-gap: 24px;
+  align-items: start;
+}
+.promotion-fields > .promotion-template-picker,
+.promotion-fields > .email-preview,
+.promotion-fields > .promotion-test {
+  margin: 0;
+}
+.promotion-test > label {
+  margin-bottom: 16px;
+}
+.checkbox,
+.customer-checkbox {
+  color: #263650;
+}
