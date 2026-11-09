@@ -9,6 +9,7 @@ import { enqueueNotification } from "./notifications";
 import { enqueueEmail } from "./emails";
 import { validEmail } from "../shared/estimate-email.js";
 import type { Doc } from "./_generated/dataModel";
+import { saveCustomer } from "./lib/customers";
 const estimateStatus = v.union(
   v.literal("new"),
   v.literal("contacted"),
@@ -16,6 +17,7 @@ const estimateStatus = v.union(
   v.literal("closed"),
 );
 export type Estimate = {
+  marketingOptIn?: boolean;
   name: string;
   phone: string;
   email?: string;
@@ -41,6 +43,7 @@ export const readEstimate = (r: Doc<"estimates">) =>
   decrypt<Estimate>(r.encrypted, context(r));
 export const create = mutation({
   args: {
+    marketingOptIn: v.optional(v.boolean()),
     name: v.string(),
     phone: v.string(),
     email: v.optional(v.string()),
@@ -169,6 +172,7 @@ export const create = mutation({
       );
     const store = serviceStore(selected.booking)!.id;
     const estimate: Estimate = {
+      marketingOptIn: args.marketingOptIn === true,
       name,
       phone,
       email,
@@ -193,6 +197,17 @@ export const create = mutation({
       ...indexes,
       encrypted: await encrypt(estimate, context(indexes)),
     });
+    const customerId = await saveCustomer(
+      ctx,
+      {
+        ...estimate,
+        vehicle: [vehicleYear, vehicleMake, vehicleModel]
+          .filter(Boolean)
+          .join(" "),
+      },
+      "estimate",
+    );
+    await ctx.db.patch(estimateId, { customerId });
     await enqueueNotification(ctx, "estimate", estimateId);
     if (email)
       await enqueueEmail(ctx, estimateId, "thanks", `thanks:${estimateId}`, {
@@ -211,7 +226,11 @@ export const list = query({
     await requireAdmin(ctx);
     const rows = await ctx.db.query("estimates").order("desc").collect();
     return Promise.all(
-      rows.map(async (r) => ({ ...(await readEstimate(r)), _id: r._id })),
+      rows.map(async (r) => ({
+        ...(await readEstimate(r)),
+        _id: r._id,
+        customerId: r.customerId,
+      })),
     );
   },
 });

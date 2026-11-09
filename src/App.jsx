@@ -1,11 +1,12 @@
 import { publicPage, logoUrl } from "./site";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { stores, services, statuses, statusLabels } from "../shared/catalog";
 import { journeyProgress, progressStages } from "../shared/progress.js";
 import Estimates from "./Estimates";
+import { LiveCustomers, DemoCustomers } from "./Customers";
 const storeName = (id) => stores.find((s) => s.id === id)?.name || id;
 const serviceName = (id) => services.find((s) => s.id === id)?.name || id;
 const today = () =>
@@ -215,6 +216,7 @@ function Connected() {
 }
 export function Portal({
   demo = false,
+  previewTab = "dashboard",
   liveAppointments,
   liveInventory,
   liveEstimates = [],
@@ -226,7 +228,7 @@ export function Portal({
   saveProduct,
   signOut,
 }) {
-  const [tab, setTab] = useState("dashboard"),
+  const [tab, setTab] = useState(previewTab),
     [store, setStore] = useState(""),
     [search, setSearch] = useState(""),
     [status, setStatus] = useState(""),
@@ -313,15 +315,6 @@ export function Portal({
         .includes(search.toLowerCase()),
   );
   const active = selected ? appointments.find((a) => a._id === selected) : null;
-  const customers = useMemo(() => {
-    const grouped = new Map();
-    for (const a of filtered) {
-      const prior = grouped.get(a.email);
-      if (prior) prior.visits.push(a);
-      else grouped.set(a.email, { ...a, visits: [a] });
-    }
-    return [...grouped.values()];
-  }, [filtered]);
   const stats = [
     [
       "New requests",
@@ -701,7 +694,7 @@ export function Portal({
               </div>
             </>
           )}
-          {["appointments", "vehicles", "customers"].includes(tab) && (
+          {["appointments", "vehicles"].includes(tab) && (
             <>
               <div className="toolbar">
                 <input
@@ -762,55 +755,12 @@ export function Portal({
                     </div>
                   )}
                 </div>
-              ) : (
-                <div className="panel table-scroll">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Customer</th>
-                        <th>Phone</th>
-                        <th>Vehicles</th>
-                        <th>Appointments</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {customers.map((c) => (
-                        <tr key={c.email}>
-                          <td>
-                            <strong>{c.name}</strong>
-                            <small>{c.email}</small>
-                          </td>
-                          <td>
-                            <a href={"tel:" + c.phone.replace(/[^+\d]/g, "")}>
-                              {c.phone}
-                            </a>
-                          </td>
-                          <td>
-                            {[...new Set(c.visits.map((a) => a.vehicle))].join(
-                              ", ",
-                            )}
-                          </td>
-                          <td>
-                            <button
-                              className="text-button"
-                              onClick={() => setSelected(c._id)}
-                            >
-                              {c.visits.length} · Latest appointment
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {!customers.length && (
-                    <div className="empty">
-                      No customers match these filters.
-                    </div>
-                  )}
-                </div>
-              )}
+              ) : null}
             </>
           )}
+          <div hidden={tab !== "customers"}>
+            {demo ? <DemoCustomers store={store} Modal={Modal} appointments={appointments} estimates={estimates} /> : <LiveCustomers store={store} Modal={Modal} appointments={appointments} estimates={estimates} />}
+          </div>
           {tab === "estimates" && (
             <Estimates
               items={estimates}

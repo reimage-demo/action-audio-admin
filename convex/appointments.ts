@@ -7,6 +7,7 @@ import { blindIndex, encrypt, decrypt } from "./lib/encryption";
 import { store, status } from "./lib/validators";
 import { requireAdmin } from "./lib/requireAdmin";
 import { enqueueNotification } from "./notifications";
+import { saveCustomer } from "./lib/customers";
 const times = [
   "09:00",
   "10:00",
@@ -42,6 +43,7 @@ function validDate(date: string) {
     );
 }
 type Booking = {
+  marketingOptIn?: boolean;
   name: string;
   email: string;
   phone: string;
@@ -66,7 +68,7 @@ const context = (a: {
   trackingHash: string;
   slotHash: string;
 }) => JSON.stringify([a.requestHash, a.emailHash, a.trackingHash, a.slotHash]);
-async function read(a: Doc<"appointments">) {
+export async function readBooking(a: Doc<"appointments">) {
   return decrypt<Booking>(a.encrypted, context(a));
 }
 export const availability = query({
@@ -80,7 +82,7 @@ export const availability = query({
         .query("appointments")
         .withIndex("by_slot", (q) => q.eq("slotHash", hash))
         .collect();
-      const bookings = await Promise.all(rows.map(read));
+      const bookings = await Promise.all(rows.map(readBooking));
       if (!bookings.some(active)) available.push(time);
     }
     return available;
@@ -88,6 +90,7 @@ export const availability = query({
 });
 export const create = mutation({
   args: {
+    marketingOptIn: v.optional(v.boolean()),
     name: v.string(),
     email: v.string(),
     phone: v.string(),
@@ -124,7 +127,7 @@ export const create = mutation({
       .unique();
     if (old) {
       // Idempotent retries must belong to the same booking payload.
-      const prior = await read(old);
+      const prior = await readBooking(old);
       if (
         prior.email !== email ||
         prior.name !== args.name.trim() ||
@@ -163,7 +166,7 @@ export const create = mutation({
       .query("appointments")
       .withIndex("by_slot", (q) => q.eq("slotHash", slotHash))
       .collect();
-    if ((await Promise.all(booked.map(read))).some(active))
+    if ((await Promise.all(booked.map(readBooking))).some(active))
       throw new ConvexError(
         "That time was just requested. Please select another time.",
       );
@@ -195,6 +198,8 @@ export const create = mutation({
       ...indexes,
       encrypted: await encrypt(booking, context(indexes)),
     });
+    const customerId = await saveCustomer(ctx, booking, "appointment");
+    await ctx.db.patch(appointmentId, { customerId });
     await enqueueNotification(ctx, "appointment", appointmentId);
     return { trackingCode };
   },
@@ -209,7 +214,7 @@ export const track = query({
       .withIndex("by_tracking", (q) => q.eq("trackingHash", hash))
       .unique();
     if (!row) return null;
-    const a = await read(row);
+    const a = await readBooking(row);
     return {
       store: a.store,
       date: a.date,
@@ -229,8 +234,9 @@ export const list = query({
     const rows = await ctx.db.query("appointments").order("desc").collect();
     return Promise.all(
       rows.map(async (row) => ({
-        ...(await read(row)),
+        ...(await readBooking(row)),
         _id: row._id,
+        customerId: row.customerId,
         _creationTime: row._creationTime,
       })),
     );
@@ -249,7 +255,7 @@ export const updateStatus = mutation({
     if (!row) throw new ConvexError("Appointment not found.");
     if (args.message.length > 1000)
       throw new ConvexError("Keep customer updates under 1,000 characters.");
-    const a = await read(row);
+    const a = await readBooking(row);
     const targetDate = args.estimatedReadyDate;
     if (targetDate && targetDate !== a.estimatedReadyDate) {
       const date = new Date(targetDate + "T12:00:00Z");
@@ -276,7 +282,7 @@ export const updateStatus = mutation({
         .withIndex("by_slot", (q) => q.eq("slotHash", row.slotHash))
         .collect();
       const others = await Promise.all(
-        conflicts.filter((x) => x._id !== row._id).map(read),
+        conflicts.filter((x) => x._id !== row._id).map(readBooking),
       );
       if (others.some(active))
         throw new ConvexError("This appointment slot is now occupied.");

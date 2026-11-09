@@ -19,10 +19,13 @@
   },
   "devDependencies": {
     "@edge-runtime/vm": "^5.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/node": "^24.0.0",
     "@vitejs/plugin-react": "^5.0.0",
     "convex-test": "^0.0.41",
     "esbuild": "^0.28.2",
+    "jsdom": "^29.1.1",
     "prettier": "^3.9.9",
     "sharp": "^0.35.5",
     "typescript": "^5.9.0",

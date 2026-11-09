@@ -122,6 +122,7 @@ describe("customer encryption", () => {
         "trackingHash",
         "requestHash",
         "slotHash",
+        "customerId",
       ].sort(),
     );
     expect(

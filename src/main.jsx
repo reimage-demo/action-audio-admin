@@ -56,7 +56,9 @@ function Setup() {
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ErrorBoundary>
-      {url ? (
+      {import.meta.env.DEV && new URLSearchParams(location.search).has("preview") ? (
+        <Portal demo previewTab="customers" />
+      ) : url ? (
         <ConvexAuthProvider client={new ConvexReactClient(url)}>
           <App />
         </ConvexAuthProvider>

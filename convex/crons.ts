@@ -6,4 +6,5 @@ crons.interval(
   { minutes: 5 },
   internal.emails.drain,
 );
+crons.interval("Process queued promotions", { minutes: 5 }, internal.campaigns.drain);
 export default crons;
