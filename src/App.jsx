@@ -487,6 +487,9 @@ export function Portal({
           if (event.key === "Escape") closeNavigation();
         }}
       >
+        <a href={publicPage()} className="sidebar-brand">
+          <Logo />
+        </a>
         <button
           className="sidebar-close"
           ref={navigationClose}
@@ -495,9 +498,6 @@ export function Portal({
         >
           {isMobile ? "Close" : "Collapse"}
         </button>
-        <a href={publicPage()} className="sidebar-brand">
-          <Logo />
-        </a>
         <span className="workspace-label">STORE WORKSPACE</span>
         <nav aria-label="Admin navigation">
           {tabs.map(([id, label]) => (

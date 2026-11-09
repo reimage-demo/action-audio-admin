@@ -222,7 +222,7 @@ a:hover {
   z-index: 40;
 }
 .sidebar-brand {
-  padding: 1px 10px 29px;
+  padding: 1px 10px 16px;
   display: block;
 }
 .workspace-label {
@@ -1465,10 +1465,10 @@ a.text-button:hover { background: #edf3fa; color: #12345b; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-end;
+  align-self: center;
   min-height: 36px;
   padding: 7px 14px;
-  margin: -10px 0 18px;
+  margin: 0 0 8px;
   border: 1px solid #7d92aa;
   font-size: 12px;
   line-height: 1.3;
