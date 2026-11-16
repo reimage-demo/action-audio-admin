@@ -526,6 +526,15 @@ export function Portal({
                 )}
             </button>
           ))}
+          <a
+            className="rental-link"
+            href="https://login.rentmect.com/?merchant=actionaudio"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Book RentMeCT rental (opens in a new tab)"
+          >
+            Book RentMeCT rental ↗
+          </a>
         </nav>
         <div className="sidebar-bottom">
           <div className="store-mark">AA</div>

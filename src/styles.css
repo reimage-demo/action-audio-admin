@@ -1539,3 +1539,17 @@ button.text-button.delete-estimate-button:hover { color: #98192b; background: #f
 .customer-checkbox {
   color: #263650;
 }
+
+.sidebar nav .rental-link {
+  display: flex;
+  align-items: center;
+  min-height: 47px;
+  padding: 10px 14px;
+  border-left: 3px solid transparent;
+  color: #e5edf6;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.sidebar nav .rental-link:hover { background: #204b78; color: #fff; }
+.sidebar nav .rental-link:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
