@@ -292,6 +292,16 @@ describe("estimate email outbox", () => {
     await t.action(internal.emails.deliver, { id: delivery._id });
     expect(fetcher).toHaveBeenCalledTimes(2);
   });
+  it("adds a service-specific booking action to estimates only", () => {
+    const estimate = estimateEmail({ kind: "estimate", name: "Sam", service: "window-tinting", store: "hartford", body: "Your estimate is $450." });
+    expect(estimate.htmlContent).toContain("Request Your Appointment Online");
+    expect(estimate.htmlContent).toContain("service=window-tinting");
+    expect(estimate.textContent).toContain("https://www.actionaudiostorellc.com/book.html?service=window-tinting");
+    expect(estimate.htmlContent.indexOf("Your estimate is $450.")).toBeLessThan(estimate.htmlContent.indexOf("Request Your Appointment Online"));
+    const thanks = estimateEmail({ kind: "thanks", name: "Sam", service: "window-tinting", store: "hartford" });
+    expect(thanks.htmlContent).not.toContain("Request Your Appointment Online");
+    expect(thanks.textContent).not.toContain("Request Your Appointment Online");
+  });
   it("escapes customer and staff text in the HTML template", () => {
     const result = estimateEmail({
       kind: "estimate",

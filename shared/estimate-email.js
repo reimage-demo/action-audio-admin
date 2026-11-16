@@ -15,8 +15,17 @@ const escape = (value) =>
   );
 export function estimateEmail({ kind, name, service, store, body = "" }) {
   const location = stores.find((s) => s.id === store);
-  const serviceName =
-    serviceContent.find((s) => s.id === service)?.name || "Vehicle service";
+  const selectedService = serviceContent.find((s) => s.id === service);
+  const serviceName = selectedService?.name || "Vehicle service";
+  const bookingUrl = new URL("https://www.actionaudiostorellc.com/book.html");
+  if (selectedService?.booking) {
+    bookingUrl.searchParams.set("service", selectedService.booking);
+    bookingUrl.searchParams.set("topic", selectedService.name);
+  } else if (location) {
+    bookingUrl.searchParams.set("store", location.id);
+  }
+  const bookingLink = bookingUrl.toString();
+  const bookingText = "Ready to get started? Request an appointment online and our team will contact you to confirm your visit.";
   const title =
     kind === "thanks"
       ? "Thank you for your submission."
@@ -31,7 +40,7 @@ export function estimateEmail({ kind, name, service, store, body = "" }) {
       kind === "thanks"
         ? "We received your estimate request | Action Audio"
         : `${serviceName} estimate | Action Audio`,
-    textContent: `ACTION AUDIO\n${title}\n\nHi ${name},\n\n${message}\n\nThe Action Audio team\n${footer}`,
+    textContent: `ACTION AUDIO\n${title}\n\nHi ${name},\n\n${message}${kind === "estimate" ? `\n\n${bookingText}\nRequest Your Appointment Online: ${bookingLink}` : ""}\n\nThe Action Audio team\n${footer}`,
     htmlContent: `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#f2f5f8;color:#172b43;font-family:Arial,Helvetica,sans-serif">
@@ -47,6 +56,7 @@ export function estimateEmail({ kind, name, service, store, body = "" }) {
 <h1 style="font-size:28px;line-height:1.2;margin:0 0 24px;color:#12345b">${escape(title)}</h1>
 <p style="font-size:16px;line-height:1.6;margin:0 0 18px">Hi ${escape(name)},</p>
 <div style="font-size:16px;line-height:1.7;overflow-wrap:anywhere">${escape(message).replace(/\n/g, "<br>")}</div>
+${kind === "estimate" ? `<div style="margin:28px 0 0"><p style="margin:0 0 8px;font-size:19px;line-height:1.3;font-weight:bold;color:#12345b">Ready to get started?</p><p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:#172b43">Request an appointment online and our team will contact you to confirm your visit.</p><table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td bgcolor="#c92336" style="border-radius:999px;background:#c92336"><a href="${escape(bookingLink)}" style="display:inline-block;padding:16px 24px;border:1px solid #c92336;border-radius:999px;color:#fff;text-decoration:none;font-size:16px;font-weight:bold;line-height:1.25">Request Your Appointment Online &rarr;</a></td></tr></table></div>` : ""}
 <p style="margin:28px 0 0;font-size:16px;line-height:1.6;font-weight:bold;color:#12345b">The Action Audio team</p>
 </td></tr>
 <tr><td bgcolor="#eaf0f6" style="padding:24px 28px;background:#eaf0f6;font-size:14px;line-height:1.7;color:#12345b">
