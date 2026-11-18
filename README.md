@@ -49,3 +49,5 @@ Appointments and estimates now save encrypted customer profiles automatically. E
 ## Portal connection restriction — November 18, 2026
 
 Production `PORTAL_RESTRICTED=true` allows the manager to authenticate and view estimate/appointment totals only. A fixed modal says “Please Contact 8602050115 to restore connection”; the background is greyed out and inert. All normal staff queries and mutations enforce the restriction server-side. New Pushover alerts contain only the request type and customer name. Intake and stored encrypted records are preserved. Restore full portal access by setting `PORTAL_RESTRICTED=false` in production Convex. Validation: 74 tests, TypeScript, and admin production build passed.
+
+The locked view now renders the actual Portal component (sidebar, header, overview cards, appointment panel and bottom panels) beneath a centered, permanent modal. The authenticated restriction endpoint supplies live aggregate metrics and today’s appointment names only. Contact details and detailed staff endpoints stay blocked. The placeholder backdrop has been removed. All 74 tests, TypeScript and the admin build passed.

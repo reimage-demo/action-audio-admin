@@ -197,15 +197,12 @@ export function RestrictedPortal({ access }) {
   return (
     <div className="restricted-shell">
       <div className="restricted-background" inert={true}>
-        <header><Logo /><h1>Staff portal</h1></header>
-        <nav>Overview · Appointments · Estimates · Customers · Electronics</nav>
-        <main>
-          <h2>Overview</h2>
-          <div className="restricted-counts">
-            <section><strong>{access.estimates}</strong><span>Total estimates</span></section>
-            <section><strong>{access.appointments}</strong><span>Total appointments</span></section>
-          </div>
-        </main>
+        <Portal
+          liveAppointments={[]}
+          liveInventory={[]}
+          liveEstimates={[]}
+          restrictedSummary={access}
+        />
       </div>
       <div className="connection-overlay">
         <div ref={dialog} tabIndex={-1} role="alertdialog" aria-modal="true" aria-labelledby="connection-message" className="connection-dialog"
@@ -246,6 +243,7 @@ function ConnectedPortal() {
 }
 export function Portal({
   demo = false,
+  restrictedSummary,
   previewTab = "dashboard",
   liveAppointments,
   liveInventory,
@@ -345,7 +343,11 @@ export function Portal({
         .includes(search.toLowerCase()),
   );
   const active = selected ? appointments.find((a) => a._id === selected) : null;
-  const stats = [
+  const stats = restrictedSummary ? [
+    ["Total estimates", restrictedSummary.estimates, "Estimate requests received"],
+    ["Total appointments", restrictedSummary.appointments, "Appointment requests received"],
+    ...restrictedSummary.dashboard.stats,
+  ] : [
     [
       "New requests",
       scoped.filter((a) => a.status === "requested").length,
@@ -537,7 +539,9 @@ export function Portal({
               onClick={() => navigate(id)}
             >
               {label}
-              {id === "estimates" &&
+              {restrictedSummary && id === "estimates" && <b>{restrictedSummary.estimates}</b>}
+              {restrictedSummary && id === "appointments" && <b>{restrictedSummary.appointments}</b>}
+              {!restrictedSummary && id === "estimates" &&
                 estimates.some(
                   (a) => a.status === "new" && (!store || a.store === store),
                 ) && (
@@ -550,7 +554,7 @@ export function Portal({
                     }
                   </b>
                 )}
-              {id === "appointments" &&
+              {!restrictedSummary && id === "appointments" &&
                 scoped.some((a) => a.status === "requested") && (
                   <b>{scoped.filter((a) => a.status === "requested").length}</b>
                 )}
@@ -700,7 +704,16 @@ export function Portal({
                     View all appointments
                   </button>
                 </div>
-                {table(scoped.filter((a) => a.date === today()))}
+                {restrictedSummary ? (
+                  <div className="table-scroll">
+                    <table><thead><tr><th>Customer</th><th>Request</th></tr></thead>
+                      <tbody>{restrictedSummary.dashboard.todayAppointments.map((a, i) => (
+                        <tr key={i}><td><strong>{a.name}</strong></td><td>Appointment</td></tr>
+                      ))}</tbody>
+                    </table>
+                    {!restrictedSummary.dashboard.todayAppointments.length && <div className="empty"><h3>No appointments here yet.</h3><p>New customer requests will appear here.</p></div>}
+                  </div>
+                ) : table(scoped.filter((a) => a.date === today()))}
               </section>
               <div className="dashboard-bottom">
                 <section className="panel compact">
@@ -719,7 +732,7 @@ export function Portal({
                 <section className="panel compact">
                   <h2>Public electronics</h2>
                   <p>
-                    {inventory.filter((p) => p.published).length} published
+                    {restrictedSummary ? restrictedSummary.dashboard.publishedProducts : inventory.filter((p) => p.published).length} published
                     products across your stores. Add new arrivals and update
                     availability.
                   </p>
@@ -797,9 +810,9 @@ export function Portal({
               ) : null}
             </>
           )}
-          <div hidden={tab !== "customers"}>
+          {!restrictedSummary && <div hidden={tab !== "customers"}>
             {demo ? <DemoCustomers store={store} Modal={Modal} appointments={appointments} estimates={estimates} /> : <LiveCustomers store={store} Modal={Modal} appointments={appointments} estimates={estimates} />}
-          </div>
+          </div>}
           {tab === "estimates" && (
             <Estimates
               items={estimates}

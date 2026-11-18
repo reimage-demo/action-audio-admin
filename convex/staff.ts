@@ -1,3 +1,4 @@
+import { readBooking } from "./appointments";
 import { query } from "./_generated/server";
 import { requireAdmin } from "./lib/requireAdmin";
 import { internalMutation } from "./_generated/server";
@@ -33,7 +34,7 @@ export const provision = internalMutation({
   },
 });
 
-// This endpoint exposes counts only; restricted sessions never receive customer records.
+// Only aggregate dashboard metrics and appointment names leave this endpoint.
 export const access = query({
   args: {},
   handler: async (ctx) => {
@@ -42,6 +43,21 @@ export const access = query({
     if (!restricted) return { restricted: false, estimates: 0, appointments: 0 };
     const estimates = await ctx.db.query("estimates").collect();
     const appointments = await ctx.db.query("appointments").collect();
-    return { restricted: true, estimates: estimates.length, appointments: appointments.length };
+    const bookings = await Promise.all(appointments.map(readBooking));
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    const inventory = await ctx.db.query("inventory").collect();
+    return {
+      restricted: true, estimates: estimates.length, appointments: appointments.length,
+      dashboard: {
+        stats: [
+          ["New requests", bookings.filter(a => a.status === "requested").length, "Awaiting confirmation"],
+          ["Vehicles in the shop", bookings.filter(a => ["checked_in", "in_progress", "waiting_parts", "quality_check"].includes(a.status)).length, "Active service"],
+          ["Ready for pickup", bookings.filter(a => a.status === "ready").length, "Awaiting collection"],
+          ["Today’s appointments", bookings.filter(a => a.date === today && a.status !== "cancelled").length, "Today"],
+        ],
+        todayAppointments: bookings.filter(a => a.date === today).map(a => ({ name: a.name })),
+        publishedProducts: inventory.filter(p => p.published).length,
+      },
+    };
   },
 });

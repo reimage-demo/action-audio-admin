@@ -17,7 +17,9 @@ it("keeps login authorization and counts while denying customer reads and writes
   });
   const admin = t.withIdentity({ subject: id + "|session" });
   await t.mutation(api.estimates.create, { name: "Private Customer", phone: "8605550123", email: "private@example.com", vehicleMake: "Toyota", vehicleModel: "Camry", service: "remote-starters", requestKey: crypto.randomUUID() });
-  expect(await admin.query(api.staff.access, {})).toEqual({ restricted: true, estimates: 1, appointments: 0 });
+  const access = await admin.query(api.staff.access, {});
+  expect(access).toMatchObject({ restricted: true, estimates: 1, appointments: 0 });
+  expect(JSON.stringify(access)).not.toMatch(/Private Customer|8605550123|private@example.com|Toyota|Camry/);
   await expect(t.query(api.staff.access, {})).rejects.toThrow("Staff access required");
   for (const ref of [api.estimates.list, api.appointments.list, api.customers.list, api.emails.usage]) {
     await expect(admin.query(ref, {})).rejects.toThrow("Please Contact 8602050115 to restore connection");
