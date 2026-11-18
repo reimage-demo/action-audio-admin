@@ -45,3 +45,7 @@ Added required customer email intake, email-delivery confirmation copy, an encry
 ## Customer directory and promotions
 
 Appointments and estimates now save encrypted customer profiles automatically. Existing requests can be imported in resumable batches. The Customers tab supports individual/page/all-matching selection, marketing permission management, and four branded promotion templates with drafts, previews, and recipient review. Promotional sending is disabled pending the dedicated Brevo campaign connection. See docs/customer-promotions-local.md for the release configuration and verification workflow.
+
+## Portal connection restriction — November 18, 2026
+
+Production `PORTAL_RESTRICTED=true` allows the manager to authenticate and view estimate/appointment totals only. A fixed modal says “Please Contact 8602050115 to restore connection”; the background is greyed out and inert. All normal staff queries and mutations enforce the restriction server-side. New Pushover alerts contain only the request type and customer name. Intake and stored encrypted records are preserved. Restore full portal access by setting `PORTAL_RESTRICTED=false` in production Convex. Validation: 73 tests, TypeScript, and admin production build passed.

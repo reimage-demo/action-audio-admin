@@ -1,3 +1,5 @@
+import { readEstimate } from "./estimates";
+import { readBooking } from "./appointments";
 import { v } from "convex/values";
 import {
   internalAction,
@@ -26,7 +28,18 @@ export async function enqueueNotification(
 
 export const getDelivery = internalQuery({
   args: { id: v.id("notificationDeliveries") },
-  handler: (ctx, { id }) => ctx.db.get(id),
+  handler: async (ctx, { id }) => {
+    const row = await ctx.db.get(id);
+    if (!row) return null;
+    const record = row.kind === "appointment"
+      ? await ctx.db.get(row.recordId as Id<"appointments">)
+      : await ctx.db.get(row.recordId as Id<"estimates">);
+    if (!record) return null;
+    const data = row.kind === "appointment"
+      ? await readBooking(record as import("./_generated/dataModel").Doc<"appointments">)
+      : await readEstimate(record as import("./_generated/dataModel").Doc<"estimates">);
+    return { ...row, name: data.name };
+  },
 });
 
 export const recordResult = internalMutation({
@@ -89,8 +102,8 @@ export const deliver = internalAction({
         ? "Action Audio — New appointment request"
         : "Action Audio — New estimate request",
       message: booking
-        ? "A customer submitted an appointment request. Open the staff portal to review the details and confirm the appointment."
-        : "A customer requested an estimate. Open the staff portal’s Estimates tab to review the request and follow up.",
+        ? `New appointment request — ${row.name}`
+        : `New estimate request — ${row.name}`,
       url: portal,
       url_title: "Open Action Audio staff portal",
       priority: "0",

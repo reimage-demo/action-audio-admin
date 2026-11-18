@@ -87,9 +87,10 @@ describe("Pushover intake notifications", () => {
       ]),
     );
     for (const body of bodies) {
+      expect(body.get("message")).toMatch(/^New (appointment|estimate) request — Notification Test$/);
       expect(body.get("device")).toBe("iphone");
       expect(body.get("url")).toBe(process.env.PUSHOVER_PORTAL_URL);
-      for (const secret of [a.name, a.email, a.phone, a.notes, a.vehicle])
+      for (const secret of [a.email, a.phone, a.notes, a.vehicle])
         expect(body.toString()).not.toContain(encodeURIComponent(secret));
     }
     await t.action(internal.notifications.deliver, { id: rows[0]._id });

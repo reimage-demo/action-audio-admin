@@ -187,6 +187,36 @@ export default function App() {
   return isAuthenticated ? <Connected /> : <Login />;
 }
 function Connected() {
+  const access = useQuery(api.staff.access);
+  if (!access) return <div className="auth-shell">Loading your workspace…</div>;
+  return access.restricted ? <RestrictedPortal access={access} /> : <ConnectedPortal />;
+}
+export function RestrictedPortal({ access }) {
+  const dialog = useRef(null);
+  useEffect(() => { dialog.current?.focus(); }, []);
+  return (
+    <div className="restricted-shell">
+      <div className="restricted-background" inert="">
+        <header><Logo /><h1>Staff portal</h1></header>
+        <nav>Overview · Appointments · Estimates · Customers · Electronics</nav>
+        <main>
+          <h2>Overview</h2>
+          <div className="restricted-counts">
+            <section><strong>{access.estimates}</strong><span>Total estimates</span></section>
+            <section><strong>{access.appointments}</strong><span>Total appointments</span></section>
+          </div>
+        </main>
+      </div>
+      <div className="connection-overlay">
+        <div ref={dialog} tabIndex={-1} role="alertdialog" aria-modal="true" aria-labelledby="connection-message" className="connection-dialog"
+          onKeyDown={(event) => { if (event.key === "Tab" || event.key === "Escape") event.preventDefault(); }}>
+          <h2 id="connection-message">Please Contact 8602050115 to restore connection</h2>
+        </div>
+      </div>
+    </div>
+  );
+}
+function ConnectedPortal() {
   const appointments = useQuery(api.appointments.list),
     inventory = useQuery(api.inventory.list),
     estimates = useQuery(api.estimates.list),

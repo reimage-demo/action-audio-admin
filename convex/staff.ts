@@ -1,3 +1,5 @@
+import { query } from "./_generated/server";
+import { requireAdmin } from "./lib/requireAdmin";
 import { internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { managerUsername, validPasswordHash } from "./lib/password";
@@ -28,5 +30,18 @@ export const provision = internalMutation({
       secret: passwordHash,
     });
     return { created: true, username };
+  },
+});
+
+// This endpoint exposes counts only; restricted sessions never receive customer records.
+export const access = query({
+  args: {},
+  handler: async (ctx) => {
+    await requireAdmin(ctx, true);
+    const restricted = process.env.PORTAL_RESTRICTED === "true";
+    if (!restricted) return { restricted: false, estimates: 0, appointments: 0 };
+    const estimates = await ctx.db.query("estimates").collect();
+    const appointments = await ctx.db.query("appointments").collect();
+    return { restricted: true, estimates: estimates.length, appointments: appointments.length };
   },
 });
