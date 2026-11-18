@@ -196,7 +196,7 @@ export function RestrictedPortal({ access }) {
   useEffect(() => { dialog.current?.focus(); }, []);
   return (
     <div className="restricted-shell">
-      <div className="restricted-background" inert="">
+      <div className="restricted-background" inert={true}>
         <header><Logo /><h1>Staff portal</h1></header>
         <nav>Overview · Appointments · Estimates · Customers · Electronics</nav>
         <main>
