@@ -79,12 +79,10 @@ export const deliver = internalAction({
     if (!row || row.status !== "pending") return;
     const token = process.env.PUSHOVER_APP_TOKEN;
     const user = process.env.PUSHOVER_USER_KEY;
-    const portal = process.env.PUSHOVER_PORTAL_URL;
     if (
       process.env.PUSHOVER_ENABLED !== "true" ||
       !token ||
-      !user ||
-      !portal?.startsWith("https://")
+      !user
     ) {
       await ctx.runMutation(internal.notifications.recordResult, {
         id,
@@ -98,14 +96,8 @@ export const deliver = internalAction({
     const body = new URLSearchParams({
       token,
       user,
-      title: booking
-        ? "Action Audio — New appointment request"
-        : "Action Audio — New estimate request",
-      message: booking
-        ? `New appointment request — ${row.name}`
-        : `New estimate request — ${row.name}`,
-      url: portal,
-      url_title: "Open Action Audio staff portal",
+      title: booking ? "Appointment" : "Estimate",
+      message: row.name,
       priority: "0",
     });
     if (process.env.PUSHOVER_DEVICE)
