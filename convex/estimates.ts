@@ -209,7 +209,7 @@ export const create = mutation({
     );
     await ctx.db.patch(estimateId, { customerId });
     await enqueueNotification(ctx, "estimate", estimateId);
-    if (email)
+    if (email && process.env.BREVO_THANKS_ENABLED !== "false")
       await enqueueEmail(ctx, estimateId, "thanks", `thanks:${estimateId}`, {
         email,
         name,

@@ -157,6 +157,7 @@ export const claim = internalMutation({
     if (!row || row.status !== "pending" || row.nextAttemptAt > now)
       return null;
     if (
+      (row.kind === "thanks" && process.env.BREVO_THANKS_ENABLED === "false") ||
       process.env.BREVO_ENABLED !== "true" ||
       !process.env.BREVO_API_KEY ||
       !process.env.BREVO_SENDER_EMAIL

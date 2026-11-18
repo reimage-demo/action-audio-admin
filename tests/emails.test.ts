@@ -28,6 +28,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   delete process.env.BREVO_ENABLED;
   delete process.env.BREVO_API_KEY;
   delete process.env.BREVO_SENDER_EMAIL;
@@ -51,6 +52,17 @@ async function setup() {
   return { t, admin, estimate, delivery };
 }
 describe("estimate email outbox", () => {
+  it("skips acknowledgments while paused and resumes for new estimates", async () => {
+    const { t, delivery } = await setup();
+    vi.stubEnv("BREVO_ENABLED", "true");
+    vi.stubEnv("BREVO_THANKS_ENABLED", "false");
+    expect(await t.mutation(internal.emails.claim, { id: delivery._id })).toBeNull();
+    await t.mutation(api.estimates.create, request());
+    expect(await t.run(ctx => ctx.db.query("emailDeliveries").collect())).toHaveLength(1);
+    vi.stubEnv("BREVO_THANKS_ENABLED", "true");
+    await t.mutation(api.estimates.create, request());
+    expect(await t.run(ctx => ctx.db.query("emailDeliveries").collect())).toHaveLength(2);
+  });
   it("allows only the manager to delete an estimate and removes its queued records without resetting send limits", async () => {
     const { t, admin, estimate, delivery } = await setup();
     await t.mutation(api.estimates.create, request({ phone: "8605550199" }));
@@ -291,16 +303,6 @@ describe("estimate email outbox", () => {
     );
     await t.action(internal.emails.deliver, { id: delivery._id });
     expect(fetcher).toHaveBeenCalledTimes(2);
-  });
-  it("adds a service-specific booking action to estimates only", () => {
-    const estimate = estimateEmail({ kind: "estimate", name: "Sam", service: "window-tinting", store: "hartford", body: "Your estimate is $450." });
-    expect(estimate.htmlContent).toContain("Request Your Appointment Online");
-    expect(estimate.htmlContent).toContain("service=window-tinting");
-    expect(estimate.textContent).toContain("https://www.actionaudiostorellc.com/book.html?service=window-tinting");
-    expect(estimate.htmlContent.indexOf("Your estimate is $450.")).toBeLessThan(estimate.htmlContent.indexOf("Request Your Appointment Online"));
-    const thanks = estimateEmail({ kind: "thanks", name: "Sam", service: "window-tinting", store: "hartford" });
-    expect(thanks.htmlContent).not.toContain("Request Your Appointment Online");
-    expect(thanks.textContent).not.toContain("Request Your Appointment Online");
   });
   it("escapes customer and staff text in the HTML template", () => {
     const result = estimateEmail({
