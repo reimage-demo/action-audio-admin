@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { estimateEmail } from "../shared/estimate-email.js";
+import { estimateEmail, attachmentError, attachmentExtensions } from "../shared/estimate-email.js";
 import { useState } from "react";
 import { serviceContent } from "../shared/service-content.js";
 import { stores } from "../shared/catalog.js";
@@ -48,7 +48,7 @@ export default function Estimates({
         {demo
           ? "Preview mode — no emails are sent."
           : usage?.enabled
-            ? `${usage.used} of ${usage.limit} email attempts in the last 24 hours. Thank-you emails and estimates share this limit. Extra messages wait in the queue.`
+            ? `${usage.used} of ${usage.limit} email attempts in the last 24 hours. Appointment confirmations, thank-you emails, and estimates share this limit. Extra messages wait in the queue.`
             : "Email delivery is awaiting Brevo setup. Messages remain safely queued."}
       </p>
       <div className="toolbar">
@@ -432,6 +432,7 @@ function EmailHistory({ id }) {
             m.errorCode === "brevo_credit_buffer" ? (
               <p>Waiting for available daily email capacity.</p>
             ) : null}
+            {m.attachments?.length > 0 && <p>Attachments: {m.attachments.map(file => file.name).join(", ")}</p>}
             {m.body && <p className="email-message-body">{m.body}</p>}
             {m.status === "failed" && (
               <button
@@ -461,6 +462,7 @@ function EmailHistory({ id }) {
 function EmailComposer({ request, onSend, demo, Modal, onClose }) {
   const [email, setEmail] = useState(request.email || "");
   const [body, setBody] = useState("");
+  const [files, setFiles] = useState([]);
   const [requestKey] = useState(() => crypto.randomUUID());
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -470,7 +472,7 @@ function EmailComposer({ request, onSend, demo, Modal, onClose }) {
     kind: "estimate",
     body:
       body ||
-      "Type your estimate below. Your message will appear here with Action Audio branding.",
+      "Your estimate details will appear here as you type.",
   });
   return (
     <Modal
@@ -490,84 +492,108 @@ function EmailComposer({ request, onSend, demo, Modal, onClose }) {
           <button onClick={onClose}>Back to request</button>
         </div>
       ) : (
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (busy) return;
-            setBusy(true);
-            setError("");
-            try {
-              if (!demo)
-                await onSend({ id: request._id, email, body, requestKey });
-              setQueued(true);
-            } catch (err) {
-              setError(
-                err.data ||
-                  err.message ||
-                  "Unable to queue email. Your draft is still here.",
-              );
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
-          <label>
-            To
-            <input
-              type="email"
-              value={email}
-              maxLength={254}
-              required
+        <div className="estimate-composer">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (busy) return;
+              setBusy(true);
+              setError("");
+              try {
+                const problem = attachmentError(files);
+                if (problem) throw new Error(problem);
+                if (!demo) {
+                  const attachments = await Promise.all(files.map(async file => ({
+                    name: file.name, bytes: await file.arrayBuffer(),
+                  })));
+                  await onSend({ id: request._id, email, body, requestKey, files: attachments });
+                }
+                setQueued(true);
+              } catch (err) {
+                setError(
+                  err.data ||
+                    err.message ||
+                    "Unable to queue email. Your draft is still here.",
+                );
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            <label>
+              To
+              <input
+                type="email"
+                value={email}
+                maxLength={254}
+                required
+                disabled={busy}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <p className="email-subject">
+              <strong>Subject:</strong> {preview.subject}
+            </p>
+            <label>
+              Your estimate
+              <textarea
+                autoFocus
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                rows={8}
+                minLength={10}
+                maxLength={10000}
+                required
+                disabled={busy}
+                placeholder="Describe the recommended work, estimated price, what’s included, and the next step."
+              />
+            </label>
+            <p className="estimate-help">
+              The greeting, Action Audio branding, and store contact details are
+              included automatically. Customers can reply directly to the store.
+            </p>
+            <label>
+              Attach files
+              <input type="file" multiple accept={attachmentExtensions.join(",")} disabled={busy}
+                onChange={e => {
+                  const selected = [...files, ...e.target.files];
+                  e.target.value = "";
+                  const problem = attachmentError(selected);
+                  setError(problem);
+                  if (!problem) setFiles(selected);
+                }} />
+            </label>
+            <small>PDF, Word, Excel, CSV, text, JPG, or PNG. Up to five files, 5 MB total.</small>
+            {files.length > 0 && <ul>{files.map((file, i) => <li key={i}>
+              {file.name} <button type="button" className="text-button" disabled={busy}
+                aria-label={`Remove ${file.name}`} onClick={() => setFiles(files.filter((_, index) => index !== i))}>Remove</button>
+            </li>)}</ul>}
+            {error && (
+              <p className="notice" role="alert">
+                {error}
+              </p>
+            )}
+            <button type="submit" disabled={busy}>
+              {busy ? "Queueing…" : demo ? "Preview send" : "Send email"}
+            </button>
+            <button
+              type="button"
+              className="text-button"
               disabled={busy}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <p className="email-subject">
-            <strong>Subject:</strong> {preview.subject}
-          </p>
-          <label>
-            Your estimate
-            <textarea
-              autoFocus
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              rows={8}
-              minLength={10}
-              maxLength={10000}
-              required
-              disabled={busy}
-              placeholder="Describe the recommended work, estimated price, what’s included, and the next step."
-            />
-          </label>
-          <p className="estimate-help">
-            The greeting, Action Audio branding, and store contact details are
-            included automatically. Customers can reply directly to the store.
-          </p>
-          <details className="email-preview" open>
-            <summary>Branded email preview</summary>
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+          </form>
+          <section className="estimate-live-preview" aria-labelledby="estimate-preview-heading">
+            <h3 id="estimate-preview-heading">Email preview</h3>
             <iframe
               title="Action Audio estimate email preview"
               sandbox=""
               srcDoc={preview.htmlContent}
             />
-          </details>
-          {error && (
-            <p className="notice" role="alert">
-              {error}
-            </p>
-          )}
-          <button type="submit" disabled={busy}>
-            {busy ? "Queueing…" : demo ? "Preview send" : "Send email"}
-          </button>
-          <button
-            type="button"
-            className="text-button"
-            disabled={busy}
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-        </form>
+          </section>
+        </div>
       )}
     </Modal>
   );

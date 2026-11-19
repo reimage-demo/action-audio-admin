@@ -6,6 +6,7 @@ import type { Doc } from "./_generated/dataModel";
 import { blindIndex, encrypt, decrypt } from "./lib/encryption";
 import { store, status } from "./lib/validators";
 import { requireAdmin } from "./lib/requireAdmin";
+import { enqueueEmail } from "./emails";
 import { enqueueNotification } from "./notifications";
 import { saveCustomer } from "./lib/customers";
 const times = [
@@ -308,5 +309,17 @@ export const updateStatus = mutation({
         context(row),
       ),
     });
+    if (args.status === "confirmed" && a.status !== "confirmed") {
+      const serviceName = services.find((service) => service.id === a.service)?.name || a.service;
+      const date = new Date(a.date + "T12:00:00Z").toLocaleDateString("en-US", {
+        dateStyle: "full", timeZone: "America/New_York",
+      });
+      await enqueueEmail(ctx, { appointmentId: row._id }, "confirmation", `confirmation:${row._id}:${a.updates.length}`, {
+        name: a.name, email: a.email, service: a.service, store: a.store,
+        body: `Your appointment for ${serviceName} is confirmed for ${date} at ${a.time} Eastern time. We look forward to seeing you and your ${a.vehicle}.
+
+If you need to change your appointment, please reply to this email.`,
+      });
+    }
   },
 });

@@ -52,8 +52,10 @@ export default defineSchema({
     encrypted: encryptedValue,
   }).index("by_identity", ["identityHash"]),
   emailDeliveries: defineTable({
-    estimateId: v.id("estimates"),
-    kind: v.union(v.literal("thanks"), v.literal("estimate")),
+    estimateId: v.optional(v.id("estimates")),
+    appointmentId: v.optional(v.id("appointments")),
+    fileIds: v.optional(v.array(v.id("_storage"))),
+    kind: v.union(v.literal("thanks"), v.literal("estimate"), v.literal("confirmation")),
     key: v.string(),
     encrypted: encryptedValue,
     status: v.union(

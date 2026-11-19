@@ -1,5 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import {
+  action,
+  internalQuery,
   mutation,
   query,
   internalAction,
@@ -12,27 +14,32 @@ import type { Estimate } from "./estimates";
 import { encrypt, decrypt } from "./lib/encryption";
 import { requireAdmin } from "./lib/requireAdmin";
 import {
+  attachmentError,
   EMAIL_DAILY_LIMIT,
   estimateEmail,
   validEmail,
 } from "../shared/estimate-email.js";
+type Attachment = { name: string; sha256: string; storageId: Id<"_storage"> };
 type Payload = {
   email: string;
   name: string;
   service: string;
   store: string;
   body: string;
+  attachments?: Attachment[];
 };
 const context = (key: string) => JSON.stringify(["estimate-email", key]);
 export async function enqueueEmail(
   ctx: MutationCtx,
-  estimateId: Id<"estimates">,
-  kind: "thanks" | "estimate",
+  owner:
+    { estimateId: Id<"estimates"> } | { appointmentId: Id<"appointments"> },
+  kind: "thanks" | "estimate" | "confirmation",
   key: string,
   payload: Payload,
 ) {
   const id = await ctx.db.insert("emailDeliveries", {
-    estimateId,
+    ...owner,
+    fileIds: payload.attachments?.map((file) => file.storageId),
     kind,
     key,
     encrypted: await encrypt(payload, context(key)),
@@ -43,52 +50,132 @@ export async function enqueueEmail(
   await ctx.scheduler.runAfter(0, internal.emails.deliver, { id });
   return id;
 }
-export const sendEstimate = mutation({
-  args: {
-    id: v.id("estimates"),
-    email: v.string(),
-    body: v.string(),
-    requestKey: v.string(),
-  },
-  handler: async (ctx, args) => {
-    await requireAdmin(ctx);
-    const email = args.email.trim().toLowerCase(),
-      body = args.body.trim();
-    if (!validEmail(email))
-      throw new ConvexError("Enter a valid customer email address.");
-    if (body.length < 10 || body.length > 10000)
+const messageArgs = {
+  id: v.id("estimates"),
+  email: v.string(),
+  body: v.string(),
+  requestKey: v.string(),
+};
+type Message = {
+  id: Id<"estimates">;
+  email: string;
+  body: string;
+  requestKey: string;
+};
+async function queueEstimate(
+  ctx: MutationCtx,
+  args: Message,
+  attachments: Attachment[] = [],
+) {
+  await requireAdmin(ctx);
+  const email = args.email.trim().toLowerCase(),
+    body = args.body.trim();
+  if (!validEmail(email))
+    throw new ConvexError("Enter a valid customer email address.");
+  if (body.length < 10 || body.length > 10000)
+    throw new ConvexError(
+      "Write an estimate between 10 and 10,000 characters.",
+    );
+  if (!/^[a-f0-9-]{36}$/.test(args.requestKey))
+    throw new ConvexError("Invalid send request.");
+  const key = `estimate:${args.id}:${args.requestKey}`;
+  const existing = await ctx.db
+    .query("emailDeliveries")
+    .withIndex("by_key", (q) => q.eq("key", key))
+    .unique();
+  if (existing) {
+    const prior = await decrypt<Payload>(existing.encrypted, context(key));
+    const original = prior.attachments || [];
+    if (
+      prior.email !== email ||
+      prior.body !== body ||
+      original.length !== attachments.length ||
+      original.some(
+        (file, i) =>
+          file.name !== attachments[i].name ||
+          file.sha256 !== attachments[i].sha256,
+      )
+    )
       throw new ConvexError(
-        "Write an estimate between 10 and 10,000 characters.",
+        "This message was already queued. Open a new email to make changes.",
       );
-    if (!/^[a-f0-9-]{36}$/.test(args.requestKey))
-      throw new ConvexError("Invalid send request.");
-    const key = `estimate:${args.id}:${args.requestKey}`;
-    const existing = await ctx.db
-      .query("emailDeliveries")
-      .withIndex("by_key", (q) => q.eq("key", key))
-      .unique();
-    if (existing) {
-      const prior = await decrypt<Payload>(existing.encrypted, context(key));
-      if (prior.email !== email || prior.body !== body)
-        throw new ConvexError(
-          "This message was already queued. Open a new email to make changes.",
+    return { id: existing._id, duplicate: true };
+  }
+  const row = await ctx.db.get(args.id);
+  if (!row) throw new ConvexError("Estimate request not found.");
+  const aad = JSON.stringify(["estimate", row.requestHash, row.phoneHash]);
+  const data = await decrypt<Estimate>(row.encrypted, aad);
+  await ctx.db.patch(row._id, {
+    encrypted: await encrypt({ ...data, email, updatedAt: Date.now() }, aad),
+  });
+  const id = await enqueueEmail(ctx, { estimateId: row._id }, "estimate", key, {
+    email,
+    body,
+    name: data.name,
+    service: data.service,
+    store: data.store,
+    ...(attachments.length ? { attachments } : {}),
+  });
+  return { id, duplicate: false };
+}
+export const sendEstimate = mutation({
+  args: messageArgs,
+  handler: async (ctx, args) => (await queueEstimate(ctx, args)).id,
+});
+export const authorizeFiles = internalQuery({
+  args: {},
+  handler: (ctx) => requireAdmin(ctx),
+});
+export const queueWithFiles = internalMutation({
+  args: {
+    ...messageArgs,
+    attachments: v.array(
+      v.object({
+        name: v.string(),
+        sha256: v.string(),
+        storageId: v.id("_storage"),
+      }),
+    ),
+  },
+  handler: (ctx, args) => queueEstimate(ctx, args, args.attachments),
+});
+export const sendWithFiles = action({
+  args: {
+    ...messageArgs,
+    files: v.array(v.object({ name: v.string(), bytes: v.bytes() })),
+  },
+  handler: async (
+    ctx,
+    { files, ...message },
+  ): Promise<Id<"emailDeliveries">> => {
+    await ctx.runQuery(internal.emails.authorizeFiles, {});
+    const error = attachmentError(
+      files.map((f) => ({ name: f.name, size: f.bytes.byteLength })),
+    );
+    if (error) throw new ConvexError(error);
+    const attachments: Attachment[] = [];
+    let retained = false;
+    try {
+      for (const file of files) {
+        const digest = await crypto.subtle.digest("SHA-256", file.bytes);
+        const sha256 = btoa(String.fromCharCode(...new Uint8Array(digest)));
+        const storageId = await ctx.storage.store(new Blob([file.bytes]), {
+          sha256,
+        });
+        attachments.push({ name: file.name, sha256, storageId });
+      }
+      const result = await ctx.runMutation(internal.emails.queueWithFiles, {
+        ...message,
+        attachments,
+      });
+      retained = !result.duplicate;
+      return result.id;
+    } finally {
+      if (!retained)
+        await Promise.all(
+          attachments.map((file) => ctx.storage.delete(file.storageId)),
         );
-      return existing._id;
     }
-    const row = await ctx.db.get(args.id);
-    if (!row) throw new ConvexError("Estimate request not found.");
-    const aad = JSON.stringify(["estimate", row.requestHash, row.phoneHash]);
-    const data = await decrypt<Estimate>(row.encrypted, aad);
-    await ctx.db.patch(row._id, {
-      encrypted: await encrypt({ ...data, email, updatedAt: Date.now() }, aad),
-    });
-    return enqueueEmail(ctx, row._id, "estimate", key, {
-      email,
-      body,
-      name: data.name,
-      service: data.service,
-      store: data.store,
-    });
   },
 });
 export const history = query({
@@ -209,7 +296,7 @@ export const recordResult = internalMutation({
       sentAt: args.status === "sent" ? Date.now() : undefined,
       nextAttemptAt: Date.now() + 3600000,
     });
-    if (args.status === "sent" && row.kind === "estimate") {
+    if (args.status === "sent" && row.kind === "estimate" && row.estimateId) {
       const estimate = await ctx.db.get(row.estimateId);
       if (estimate) {
         const aad = JSON.stringify([
@@ -287,6 +374,27 @@ export const deliver = internalAction({
       await record("pending", "account_check_unavailable");
       return;
     }
+    const attachment: { name: string; content: string }[] = [];
+    try {
+      for (const file of row.payload.attachments || []) {
+        const blob = await ctx.storage.get(file.storageId);
+        if (!blob) {
+          await record("failed", "attachment_missing");
+          return;
+        }
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        const parts = [];
+        // Multiples of three keep base64 padding confined to the final chunk.
+        for (let i = 0; i < bytes.length; i += 24576)
+          parts.push(
+            btoa(String.fromCharCode(...bytes.subarray(i, i + 24576))),
+          );
+        attachment.push({ name: file.name, content: parts.join("") });
+      }
+    } catch {
+      await record("pending", "attachment_read_failed");
+      return;
+    }
     let response: Response;
     try {
       response = await fetch("https://api.brevo.com/v3/smtp/email", {
@@ -306,8 +414,14 @@ export const deliver = internalAction({
           },
           to: [{ email: row.payload.email, name: row.payload.name }],
           ...estimateEmail({ ...row.payload, kind: row.kind }),
+          ...(attachment.length ? { attachment } : {}),
           headers: { idempotencyKey: row._id },
-          tags: ["action-audio-estimates", row.kind],
+          tags: [
+            row.kind === "confirmation"
+              ? "action-audio-appointments"
+              : "action-audio-estimates",
+            row.kind,
+          ],
         }),
       });
     } catch {

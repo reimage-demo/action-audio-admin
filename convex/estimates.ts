@@ -210,7 +210,7 @@ export const create = mutation({
     await ctx.db.patch(estimateId, { customerId });
     await enqueueNotification(ctx, "estimate", estimateId);
     if (email && process.env.BREVO_THANKS_ENABLED !== "false")
-      await enqueueEmail(ctx, estimateId, "thanks", `thanks:${estimateId}`, {
+      await enqueueEmail(ctx, { estimateId }, "thanks", `thanks:${estimateId}`, {
         email,
         name,
         service: args.service,
@@ -280,7 +280,10 @@ export const remove = mutation({
       .query("notificationDeliveries")
       .withIndex("by_record", (q) => q.eq("recordId", id))
       .collect();
-    for (const email of emails) await ctx.db.delete(email._id);
+    for (const email of emails) {
+      for (const fileId of email.fileIds || []) await ctx.storage.delete(fileId);
+      await ctx.db.delete(email._id);
+    }
     for (const notification of notifications)
       await ctx.db.delete(notification._id);
     // Keep the anonymous emailAttempts entries so deletion cannot reset limits.

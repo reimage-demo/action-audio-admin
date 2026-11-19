@@ -52,6 +52,55 @@ async function setup() {
   return { t, admin, estimate, delivery };
 }
 describe("estimate email outbox", () => {
+  function mockBrevo() {
+    vi.stubEnv("BREVO_ENABLED", "true");
+    const fetcher = vi.fn()
+      .mockResolvedValueOnce(Response.json({ plan: [{ type: "free", credits: 300 }] }))
+      .mockResolvedValueOnce(Response.json({ messageId: "test-email" }));
+    vi.stubGlobal("fetch", fetcher);
+    return fetcher;
+  }
+  it("sends one branded email when staff save a confirmed appointment", async () => {
+    const { t, admin } = await setup();
+    const date = new Date(Date.now() + 7 * 86400000);
+    if (date.getUTCDay() === 0) date.setUTCDate(date.getUTCDate() + 1);
+    await t.mutation(api.appointments.create, {
+      name: "Booking Customer", email: "booking@example.com", phone: "8605550999",
+      vehicle: "2020 Ford", service: "car-audio", store: "wethersfield",
+      date: date.toISOString().slice(0, 10), time: "14:00", notes: "", requestKey: crypto.randomUUID(),
+    });
+    const [booking] = await admin.query(api.appointments.list, {});
+    const args = { id: booking._id, status: "confirmed" as const, message: "" };
+    await admin.mutation(api.appointments.updateStatus, args);
+    await admin.mutation(api.appointments.updateStatus, args);
+    const rows = (await t.run(ctx => ctx.db.query("emailDeliveries").collect())).filter(r => r.kind === "confirmation");
+    expect(rows).toHaveLength(1);
+    await t.finishAllScheduledFunctions(vi.runAllTimers);
+    const fetcher = mockBrevo();
+    await t.action(internal.emails.deliver, { id: rows[0]._id });
+    const payload = JSON.parse(fetcher.mock.calls[1][1].body);
+    expect(payload.to[0].email).toBe("booking@example.com");
+    expect(payload.subject).toContain("Appointment confirmed");
+    expect(payload.textContent).toContain("14:00 Eastern");
+    expect(payload.htmlContent).toContain("action-audio-email-logo.png");
+  });
+  it("sends the selected file bytes, deduplicates retries, and deletes stored copies with the estimate", async () => {
+    const { t, admin, estimate } = await setup();
+    const file = { name: "quote.pdf", bytes: new TextEncoder().encode("PDF sample").buffer };
+    const args = { id: estimate._id, email: "client@example.com", body: "Installation estimate", requestKey: crypto.randomUUID(), files: [file] };
+    await expect(t.action(api.emails.sendWithFiles, args)).rejects.toThrow("Staff access");
+    const id = await admin.action(api.emails.sendWithFiles, args);
+    expect(await admin.action(api.emails.sendWithFiles, args)).toBe(id);
+    await expect(admin.action(api.emails.sendWithFiles, { ...args, files: [{ ...file, name: "new.pdf" }] })).rejects.toThrow("already queued");
+    const storageRows = () => t.run(ctx => ctx.db.system.query("_storage").collect());
+    expect(await storageRows()).toHaveLength(1);
+    await t.finishAllScheduledFunctions(vi.runAllTimers);
+    const fetcher = mockBrevo();
+    await t.action(internal.emails.deliver, { id });
+    expect(JSON.parse(fetcher.mock.calls[1][1].body).attachment).toEqual([{ name: file.name, content: btoa("PDF sample") }]);
+    await admin.mutation(api.estimates.remove, { id: estimate._id });
+    expect(await storageRows()).toHaveLength(0);
+  });
   it("skips acknowledgments while paused and resumes for new estimates", async () => {
     const { t, delivery } = await setup();
     vi.stubEnv("BREVO_ENABLED", "true");

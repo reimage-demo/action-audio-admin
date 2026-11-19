@@ -1,7 +1,7 @@
 import { publicPage, logoUrl } from "./site";
 import { useState, useEffect, useRef } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useConvexAuth, useQuery, useMutation } from "convex/react";
+import { useConvexAuth, useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { stores, services, statuses, statusLabels } from "../shared/catalog";
 import { journeyProgress, progressStages } from "../shared/progress.js";
@@ -223,6 +223,7 @@ function ConnectedPortal() {
     updateEstimate = useMutation(api.estimates.update),
     deleteEstimate = useMutation(api.estimates.remove),
     sendEstimateEmail = useMutation(api.emails.sendEstimate);
+  const sendWithFiles = useAction(api.emails.sendWithFiles);
   const { signOut } = useAuthActions();
   if (!appointments || !inventory || !estimates)
     return <div className="auth-shell">Loading your workspace…</div>;
@@ -233,7 +234,7 @@ function ConnectedPortal() {
       liveEstimates={estimates}
       updateEstimate={updateEstimate}
       deleteEstimate={deleteEstimate}
-      sendEstimateEmail={sendEstimateEmail}
+      sendEstimateEmail={({ files, ...message }) => files?.length ? sendWithFiles({ ...message, files }) : sendEstimateEmail(message)}
       emailUsage={emailUsage}
       updateStatus={updateStatus}
       saveProduct={saveProduct}
@@ -1095,7 +1096,7 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
           aria-label="Set service milestone"
         >
           {[
-            ["confirmed", "Appointment"],
+            ["confirmed", "Confirm appointment"],
             ["in_progress", "In service"],
             ["quality_check", "Final checks"],
             ["ready", "Ready"],
@@ -1110,6 +1111,7 @@ function AppointmentDialog({ appointment: a, onClose, onSave, demo }) {
             </button>
           ))}
         </div>
+        {status === "confirmed" && a.status !== "confirmed" && <p>Saving this confirmation queues an appointment email to {a.email}.</p>}
         <label>
           Service status
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
