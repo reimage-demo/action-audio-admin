@@ -1,5 +1,3 @@
-import { readEstimate } from "./estimates";
-import { readBooking } from "./appointments";
 import { v } from "convex/values";
 import {
   internalAction,
@@ -28,18 +26,7 @@ export async function enqueueNotification(
 
 export const getDelivery = internalQuery({
   args: { id: v.id("notificationDeliveries") },
-  handler: async (ctx, { id }) => {
-    const row = await ctx.db.get(id);
-    if (!row) return null;
-    const record = row.kind === "appointment"
-      ? await ctx.db.get(row.recordId as Id<"appointments">)
-      : await ctx.db.get(row.recordId as Id<"estimates">);
-    if (!record) return null;
-    const data = row.kind === "appointment"
-      ? await readBooking(record as import("./_generated/dataModel").Doc<"appointments">)
-      : await readEstimate(record as import("./_generated/dataModel").Doc<"estimates">);
-    return { ...row, name: data.name };
-  },
+  handler: (ctx, { id }) => ctx.db.get(id),
 });
 
 export const recordResult = internalMutation({
@@ -79,10 +66,12 @@ export const deliver = internalAction({
     if (!row || row.status !== "pending") return;
     const token = process.env.PUSHOVER_APP_TOKEN;
     const user = process.env.PUSHOVER_USER_KEY;
+    const portal = process.env.PUSHOVER_PORTAL_URL;
     if (
       process.env.PUSHOVER_ENABLED !== "true" ||
       !token ||
-      !user
+      !user ||
+      !portal?.startsWith("https://")
     ) {
       await ctx.runMutation(internal.notifications.recordResult, {
         id,
@@ -96,8 +85,14 @@ export const deliver = internalAction({
     const body = new URLSearchParams({
       token,
       user,
-      title: booking ? "Appointment" : "Estimate",
-      message: row.name,
+      title: booking
+        ? "Action Audio — New appointment request"
+        : "Action Audio — New estimate request",
+      message: booking
+        ? "A customer submitted an appointment request. Open the staff portal to review the details and confirm the appointment."
+        : "A customer requested an estimate. Open the staff portal’s Estimates tab to review the request and follow up.",
+      url: portal,
+      url_title: "Open Action Audio staff portal",
       priority: "0",
     });
     if (process.env.PUSHOVER_DEVICE)
