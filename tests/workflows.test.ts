@@ -1,3 +1,4 @@
+import { services, stores } from "../shared/catalog.js";
 import { convexTest } from "convex-test";
 import { describe, it, expect, beforeEach } from "vitest";
 import schema from "../convex/schema";
@@ -158,17 +159,8 @@ describe("booking and vehicle service workflow", () => {
       }),
     ).toContain("10:00");
   });
-  it("enforces store specialties and assigns independent random codes", async () => {
+  it("assigns independent random codes", async () => {
     const t = convexTest(schema, modules);
-    await expect(
-      t.mutation(api.appointments.create, request({ store: "hartford" })),
-    ).rejects.toThrow("matching location");
-    await expect(
-      t.mutation(
-        api.appointments.create,
-        request({ service: "auto-detailing" }),
-      ),
-    ).rejects.toThrow("matching location");
     const a = await t.mutation(api.appointments.create, request());
     const b = await t.mutation(
       api.appointments.create,
@@ -291,25 +283,9 @@ describe("inventory publishing", () => {
   });
 });
 
-describe("current service location restrictions", () => {
-  it.each([
-    ["auto-detailing", "hartford"],
-    ["window-tinting", "hartford"],
-    ["remote-starters", "wethersfield"],
-    ["car-audio", "wethersfield"],
-    ["dash-cams", "wethersfield"],
-    ["gps-trackers", "wethersfield"],
-  ])("books %s only at %s", async (service, store) => {
+describe("customer choice of service location", () => {
+  it.each(services.flatMap(service => stores.map(store => [service.id, store.id])))("books %s at %s", async (service, store) => {
     const t = convexTest(schema, modules);
-    await expect(
-      t.mutation(
-        api.appointments.create,
-        request({
-          service,
-          store: store === "hartford" ? "wethersfield" : "hartford",
-        }),
-      ),
-    ).rejects.toThrow();
     const result = await t.mutation(
       api.appointments.create,
       request({ service, store }),

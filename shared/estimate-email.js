@@ -48,9 +48,10 @@ export function estimateEmail({ kind, name, service, store, body = "" }) {
   const serviceName = selectedService?.name || "Vehicle service";
   const bookingUrl = new URL("https://www.actionaudiostorellc.com/book.html");
   if (selectedService?.booking) {
-    bookingUrl.searchParams.set("service", selectedService.booking);
+    bookingUrl.searchParams.set("service", selectedService.id);
     bookingUrl.searchParams.set("topic", selectedService.name);
-  } else if (location) {
+  }
+  if (location) {
     bookingUrl.searchParams.set("store", location.id);
   }
   const bookingLink = bookingUrl.toString();
@@ -100,7 +101,7 @@ ${kind === "estimate" ? `<div style="margin:28px 0 0"><p style="margin:0 0 8px;f
 </td></tr>
 <tr><td bgcolor="#12345b" style="padding:24px 28px;background:#12345b;color:#fff;font-size:12px;line-height:1.8">
 <p style="margin:0 0 12px;font-size:15px;font-weight:bold">Action Audio · Serving Connecticut since 1983</p>
-<p style="margin:0 0 12px"><strong>Wethersfield · Car audio &amp; electronics</strong><br>105 Silas Deane Hwy, Wethersfield, CT 06109<br><strong>Hartford · Detailing &amp; window tinting</strong><br>2814 Main St, Hartford, CT 06120</p>
+<p style="margin:0 0 12px"><strong>Wethersfield</strong><br>105 Silas Deane Hwy, Wethersfield, CT 06109<br><strong>Hartford</strong><br>2814 Main St, Hartford, CT 06120</p>
 <a href="https://www.actionaudiostorellc.com/" style="color:#fff;text-decoration:underline">www.actionaudiostorellc.com</a>
 </td></tr></table></td></tr></table></body></html>`,
   };

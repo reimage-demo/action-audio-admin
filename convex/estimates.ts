@@ -2,7 +2,7 @@ import { query, mutation } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { serviceContent } from "../shared/service-content.js";
 import { estimateQuestions } from "../shared/estimate-intake.js";
-import { serviceStore } from "../shared/catalog.js";
+import { store as storeValidator } from "./lib/validators";
 import { blindIndex, encrypt, decrypt } from "./lib/encryption";
 import { requireAdmin } from "./lib/requireAdmin";
 import { enqueueNotification } from "./notifications";
@@ -43,6 +43,7 @@ export const readEstimate = (r: Doc<"estimates">) =>
   decrypt<Estimate>(r.encrypted, context(r));
 export const create = mutation({
   args: {
+    store: v.optional(storeValidator),
     marketingOptIn: v.optional(v.boolean()),
     name: v.string(),
     phone: v.string(),
@@ -146,6 +147,7 @@ export const create = mutation({
         prior.vehicleMake !== vehicleMake ||
         prior.vehicleModel !== vehicleModel ||
         prior.service !== args.service ||
+        (args.store !== undefined && prior.store !== args.store) ||
         (prior.vehicleYear || "") !== vehicleYear ||
         (prior.vehicleTrim || "") !== vehicleTrim ||
         (prior.details || "") !== details ||
@@ -170,7 +172,8 @@ export const create = mutation({
       throw new ConvexError(
         "Please call the store to discuss additional estimates.",
       );
-    const store = serviceStore(selected.booking)!.id;
+    // Older forms submitted no location. Preserve their original routing.
+    const store = args.store ?? (["auto-detailing", "window-tinting"].includes(args.service) ? "hartford" : "wethersfield");
     const estimate: Estimate = {
       marketingOptIn: args.marketingOptIn === true,
       name,

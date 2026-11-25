@@ -22,7 +22,7 @@ export const save = mutation({
     await requireAdmin(ctx);
     if (data.store !== "wethersfield")
       throw new ConvexError(
-        "Electronics are available through Wethersfield. Hartford handles detailing.",
+        "Choose the Wethersfield showroom for this inventory listing.",
       );
     if (
       !data.name.trim() ||

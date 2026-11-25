@@ -192,7 +192,7 @@ export const serviceContent = [
       "Receiver and smartphone-connectivity options",
     ],
     detail:
-      "Open-air vehicles need equipment selected for their layout and riding conditions. Tell our Wethersfield team about your Polaris Slingshot, your current system, and the sound you want. We’ll review suitable equipment and installation options for your model.",
+      "Open-air vehicles need equipment selected for their layout and riding conditions. Tell our team about your Polaris Slingshot, your current system, and the sound you want. We’ll review suitable equipment and installation options for your model.",
     prepare:
       "Share your Slingshot’s year, model, existing audio equipment, and the upgrades you have in mind.",
     faq: [
@@ -214,7 +214,7 @@ export const serviceContent = [
     tag: "Time for an upgrade",
     headline: "Replace your equipment.\nRefresh your drive.",
     description:
-      "Replace an outdated stereo, worn speakers, or nonworking vehicle electronics. Explore modern touchscreen receivers and compatible replacement equipment at our Wethersfield store.",
+      "Replace an outdated stereo, worn speakers, or nonworking vehicle electronics. Explore modern touchscreen receivers and compatible replacement equipment at either store.",
     image: "service-replacement-scene.webp",
     alt: "Illustration of a technician replacing a factory stereo and connecting its wiring",
     booking: "electronics-replacement",
@@ -230,11 +230,11 @@ export const serviceContent = [
     faq: [
       [
         "Do you repair electronics?",
-        "No. We offer replacement and installation of vehicle electronics at our Wethersfield store.",
+        "No. We offer replacement and installation of vehicle electronics at either store.",
       ],
       [
         "Where do I go for a replacement?",
-        "Visit 105 Silas Deane Hwy, Wethersfield, CT 06109. Start with an estimate request so we can review your vehicle and equipment.",
+        "Choose Hartford or Wethersfield. Start with an estimate request so we can review your vehicle and equipment.",
       ],
     ],
     teaser: "Replace outdated equipment with a connected receiver.",
@@ -256,7 +256,7 @@ export const serviceContent = [
     tag: "A fresh perspective",
     headline: "Fall in love.\nWith your ride again.",
     description:
-      "Interior and exterior car detailing at our Hartford, Connecticut store. Tell us about your vehicle’s condition and the areas you would like refreshed.",
+      "Interior and exterior car detailing at either store. Tell us about your vehicle’s condition and the areas you would like refreshed.",
     image: "service-soap-wash.webp",
     alt: "A white SUV covered in soap and foam during an exterior wash",
     booking: "auto-detailing",
@@ -275,8 +275,8 @@ export const serviceContent = [
         "Timing depends on the vehicle’s condition and the agreed scope. The team will discuss a schedule when confirming your appointment.",
       ],
       [
-        "Where is your Hartford car detailing shop?",
-        "Detailing is offered at 2814 Main St, Hartford, CT 06120. The Hartford store is open Monday–Saturday, 9am–6pm, and closed Sundays. Confirm your appointment and holiday hours with the team.",
+        "Where can I book car detailing?",
+        "Choose either location for detailing. Both stores are open Monday–Saturday, 9am–6pm, and closed Sundays. Confirm your appointment and holiday hours with the team.",
       ],
       [
         "Can I request interior and exterior detailing?",
@@ -300,7 +300,7 @@ export const serviceContent = [
     tag: "Bring your next project",
     headline: "The right equipment.\nThoughtfully installed.",
     description:
-      "Bring Apple CarPlay and Android Auto to your dashboard with a compatible touchscreen radio. Plan your receiver and electronics installation with our Wethersfield team.",
+      "Bring Apple CarPlay and Android Auto to your dashboard with a compatible touchscreen radio. Plan your receiver and electronics installation with our team.",
     image: "service-radio-scene.webp",
     alt: "Illustration of a finished touchscreen radio upgrade with Apple CarPlay",
     booking: "electrical-installation",
@@ -320,7 +320,7 @@ export const serviceContent = [
       ],
       [
         "Where can I book car electronics installation near Hartford?",
-        "Book with the Wethersfield store at 105 Silas Deane Hwy, Wethersfield, CT 06109. Electronics installation is available through this location; the Hartford store offers detailing and window tinting.",
+        "All services are available at both Hartford and Wethersfield.",
       ],
       [
         "Do I need adapters for an aftermarket receiver?",
@@ -350,7 +350,7 @@ export const serviceContent = [
     tag: "Comfort and a cleaner look",
     headline: "A fresh look.\nA more comfortable drive.",
     description:
-      "Vehicle window tinting at our Hartford store. Tell us which windows you want tinted and whether existing film needs to be removed.",
+      "Vehicle window tinting at either store. Tell us which windows you want tinted and whether existing film needs to be removed.",
     image: "service-tint-application.webp",
     alt: "A LLumar installer applying window tint with a squeegee on an open car door",
     booking: "window-tinting",
@@ -360,13 +360,13 @@ export const serviceContent = [
       "Vehicle-specific installation planning",
     ],
     detail:
-      "Choose the windows you would like tinted and tell us about any existing film. Our Hartford team will discuss available film options, suitable coverage, and installation requirements before confirming a price.",
+      "Choose the windows you would like tinted and tell us about any existing film. Our team will discuss available film options, suitable coverage, and installation requirements before confirming a price.",
     prepare:
       "Share your vehicle year, make, model, the windows you want tinted, and whether old tint is already installed.",
     faq: [
       [
         "Where is window tinting offered?",
-        "Window tinting and auto detailing are offered at 2814 Main St, Hartford, CT 06120.",
+        "Window tinting and auto detailing are offered at both locations.",
       ],
       [
         "Can I get an estimate if I’m unsure about the film?",

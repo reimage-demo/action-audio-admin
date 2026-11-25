@@ -1,4 +1,4 @@
-import { services, serviceAvailableAt } from "../shared/catalog.js";
+import { services } from "../shared/catalog.js";
 import { query, mutation } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { bytesToHex } from "@noble/hashes/utils";
@@ -148,10 +148,6 @@ export const create = mutation({
     validDate(args.date);
     if (!times.includes(args.time) || !serviceIds.includes(args.service))
       throw new ConvexError("Choose a valid service and time.");
-    if (!serviceAvailableAt(args.store, args.service))
-      throw new ConvexError(
-        "Electronics and remote starters are at Wethersfield. Auto detailing is at Hartford. Please choose the matching location.",
-      );
     const recent = await ctx.db
       .query("appointments")
       .withIndex("by_email", (q) => q.eq("emailHash", emailHash))

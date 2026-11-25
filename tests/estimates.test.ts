@@ -140,9 +140,9 @@ describe("service-specific estimate intake", () => {
       })),
     });
   it.each([
-    ["auto-detailing", "hartford"],
+    ["auto-detailing", "wethersfield"],
     ["window-tinting", "hartford"],
-    ["remote-starters", "wethersfield"],
+    ["remote-starters", "hartford"],
     ["car-audio", "wethersfield"],
     ["dash-cams", "wethersfield"],
     ["gps-trackers", "wethersfield"],
@@ -154,7 +154,7 @@ describe("service-specific estimate intake", () => {
     async (service, store) => {
       const t = convexTest(schema, modules),
         admin = await staff(t),
-        args = intake(service);
+        args = { ...intake(service), store: store as "hartford" | "wethersfield" };
       await t.mutation(api.estimates.create, args);
       await t.mutation(api.estimates.create, args);
       const saved = (await admin.query(api.estimates.list, {}))[0];
